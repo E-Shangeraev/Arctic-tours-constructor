@@ -1,0 +1,39 @@
+@import 'variables.scss';
+
+@mixin filter__title {
+  margin-bottom: 10px;
+  font-family: $grotesk;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff !important;
+}
+
+@mixin filter__item {
+  margin-bottom: 3px;
+  font-family: $grotesk;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 19px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@mixin filter__dropdown {
+  padding: 7px 0;
+  width: 100%;
+
+  font-family: $grotesk;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 19px;
+  color: #ffffff;
+  text-align: left;
+
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}

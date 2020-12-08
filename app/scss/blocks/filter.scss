@@ -1,0 +1,178 @@
+@import '../variables.scss';
+
+main {
+  background-image: url('../img/bg.jpg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.filter {
+  width: 100%;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+.filter__title {
+  @include filter__title;
+}
+
+.filter__territory,
+.filter__types,
+.filter__season,
+.filter__time,
+.filter__period,
+.filter__complexity,
+.filter__price {
+  margin-bottom: 20px;
+}
+
+.filter__types {
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  li {
+    margin-bottom: 8px;
+  }
+}
+
+.filter__item {
+  @include filter__item;
+}
+
+.filter__types .filter__item {
+  display: flex;
+  justify-content: space-between;
+}
+.filter__item--red {
+  color: $red;
+  opacity: 0.9;
+}
+
+.filter__dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 7px 0;
+  margin-bottom: 10px;
+  width: 100%;
+
+  font-family: $grotesk;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 19px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: left;
+
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.filter__settings,
+.filter__view {
+  padding: 15px 21px;
+}
+
+.filter__toggle {
+  position: relative;
+  padding: 4px;
+  width: 36px;
+  height: 20px;
+  background-color: #cbcbcb;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: ease 0.4s;
+
+  & span {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 4px;
+    border-radius: 1px;
+    background-color: #fff;
+  }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+.filter__toggle--active {
+  background-color: $red;
+  span {
+    left: 90%;
+  }
+}
+
+.filter__cabinet {
+  display: flex;
+  align-items: center;
+
+  a {
+    @include filter__title;
+    margin-bottom: 0;
+    margin-right: 10px;
+    transition: ease 0.2s;
+  }
+}
+.filter__cabinet:hover {
+  cursor: pointer;
+
+  a {
+    color: $red !important;
+    text-decoration: none;
+  }
+}
+
+.nav-link {
+  @include filter__title;
+  padding: 0;
+  background-color: transparent !important;
+  transition: ease 0.2s;
+
+  &:hover,
+  &.active {
+    color: $red !important;
+  }
+}
+.nav-link:first-child {
+  margin-right: 50px;
+}
+
+.dropdown-menu.show {
+  @include filter__item;
+  width: 100%;
+  color: #000;
+  background-color: #cbcbcb;
+
+  .dropdown-item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+.dropdown-toggle:focus,
+.dropdown-toggle:active {
+  box-shadow: none !important;
+}
+
+.tab-content {
+  height: 100%;
+}
+.tab-pane {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+
+  input {
+    display: block;
+  }
+}
