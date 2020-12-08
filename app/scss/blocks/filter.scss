@@ -79,6 +79,10 @@ main {
   padding: 15px 21px;
 }
 
+.filter__view {
+  padding-right: 0;
+}
+
 .filter__toggle {
   position: relative;
   padding: 4px;
@@ -150,15 +154,25 @@ main {
 .dropdown-menu.show {
   @include filter__item;
   width: 100%;
-  color: #000;
-  background-color: #cbcbcb;
-
-  .dropdown-item:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
+  border-radius: 0 0 7px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: none;
+  background-color: rgba(26, 26, 26, 0.85);
 }
+.dropdown-item {
+  @include filter__item;
+  color: #cbcbcb;
+}
+.dropdown-item:active {
+  background-color: transparent !important;
+}
+.dropdown-item:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .dropdown-toggle:focus,
 .dropdown-toggle:active {
+  background-color: transparent !important;
   box-shadow: none !important;
 }
 
@@ -174,5 +188,11 @@ main {
 
   input {
     display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
   }
 }
