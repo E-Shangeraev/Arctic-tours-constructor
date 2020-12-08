@@ -15,6 +15,7 @@
   a {
     @include filter__title;
     margin-bottom: 0;
+    transition: ease 0.2s;
   }
 
   a:hover {
