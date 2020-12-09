@@ -2,6 +2,9 @@ const from = document.querySelector('.price-from');
 const to = document.querySelector('.price-to');
 const complexity = document.querySelector('.complexity');
 
+const groupFrom = document.querySelector('.group-from');
+const groupTo = document.querySelector('.group-to');
+
 $('.range-complexity').ionRangeSlider({
   type: 'single',
   skin: 'round',
@@ -32,10 +35,12 @@ $('.range-price').ionRangeSlider({
   },
 });
 
-let my_range = $('.range-complexity');
-
-// my_range.onChange(() => console.log(1));
-
-// handle.forEach((h) => {
-//   h.addEventListener('input', () => console.log(1));
-// });
+$('.range-group-size').ionRangeSlider({
+  type: 'double',
+  skin: 'round',
+  step: 1,
+  onChange: function (data) {
+    groupFrom.textContent = data.from;
+    groupTo.textContent = data.to;
+  },
+});

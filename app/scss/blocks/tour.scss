@@ -1,0 +1,103 @@
+@import '../variables.scss';
+
+.tour {
+  // padding: 15px 21px;
+}
+
+.tour__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tour__name {
+  font-family: $grotesk;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 30px;
+  color: #d9d9d9;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+.tour__descr {
+  @include tour__descr;
+}
+
+.tour__promo {
+  padding: 30px 50px;
+}
+
+.tour__img {
+  margin-bottom: 50px;
+  border-radius: 7px !important;
+}
+
+.tour__actions {
+  margin: 0;
+  padding: 0 50px;
+  margin-bottom: 40px;
+  list-style: none;
+}
+
+.tour__action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+
+  img {
+    margin-right: 30px;
+  }
+}
+
+.tour__descr--action {
+  margin-bottom: 0;
+}
+
+.tour__program {
+  @include tour__descr;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.tour__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0 9px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tour__footer-info {
+  @include tour__descr;
+  margin: 0;
+
+  span {
+    opacity: 0.5;
+  }
+  a {
+    @include tour__descr;
+    transition: ease 0.2s;
+  }
+  a:hover {
+    color: $red !important;
+    text-decoration: none;
+  }
+}
+
+.tour__settings {
+  margin-top: 50%;
+  margin-bottom: 100%;
+}
+
+.tour__similar {
+  padding: 0;
+  margin-top: 40px;
+
+  li:not(:last-child) {
+    margin-bottom: 60px !important;
+  }
+}

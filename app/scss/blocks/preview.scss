@@ -1,0 +1,68 @@
+@import '../variables.scss';
+
+.preview {
+  position: absolute;
+  top: 10%;
+  right: 30px;
+  width: 270px;
+  border-radius: 7px;
+  background-color: rgba(26, 26, 26, 0.75);
+  backdrop-filter: blur(5px);
+}
+
+.preview__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 15px 15px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.preview__title {
+  @include filter__title;
+}
+
+.preview__list {
+  margin: 0;
+  padding: 0;
+  padding: 15px 15px 30px 15px;
+  list-style: none;
+}
+
+.preview__tour {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 5px;
+  min-height: 130px;
+
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  border-radius: 7px;
+}
+
+.preview__tour:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.preview__tour-name {
+  @include filter__title;
+  text-shadow: 1px 1px 3px #000000;
+}
+
+.preview__tour-show {
+  @include filter__item;
+  margin-left: auto;
+  padding: 5px;
+  background-color: rgba(26, 26, 26, 0.75);
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: ease 0.2s;
+
+  &:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+    text-decoration: none;
+  }
+}

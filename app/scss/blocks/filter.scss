@@ -48,7 +48,8 @@ main {
 }
 .filter__item--red {
   color: $red;
-  opacity: 0.9;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px #000000;
 }
 
 .filter__dropdown {
@@ -79,7 +80,13 @@ main {
   padding: 15px 21px;
 }
 
+.filter__settings--tour {
+  padding: 0;
+  padding: 15px 21px;
+}
+
 .filter__view {
+  position: relative;
   padding-right: 0;
 }
 
@@ -136,6 +143,37 @@ main {
   }
 }
 
+.filter__lodging-list {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 20px;
+  margin: 0;
+  list-style: none;
+}
+
+.filter__lodging-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    margin-bottom: 10px;
+  }
+}
+
+.filter__total-price {
+  margin-bottom: 40px;
+}
+
+.filter__reservation {
+  width: 100%;
+  text-align: center;
+}
+
+.filter__description {
+  padding: 15px 21px;
+}
+
 .nav-link {
   @include filter__title;
   padding: 0;
@@ -157,7 +195,8 @@ main {
   border-radius: 0 0 7px 7px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-top: none;
-  background-color: rgba(26, 26, 26, 0.85);
+  background-color: rgba(26, 26, 26, 0.75);
+  backdrop-filter: blur(5px);
 }
 .dropdown-item {
   @include filter__item;

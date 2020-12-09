@@ -17,7 +17,7 @@
   font-weight: 500;
   font-size: 15px;
   line-height: 19px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 @mixin filter__dropdown {
@@ -36,4 +36,15 @@
   border: none;
   border-radius: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@mixin tour__descr {
+  margin: 0;
+  margin-bottom: 30px;
+  font-family: $grotesk;
+  font-style: normal;
+  // font-weight: bold;
+  font-size: 16px;
+  line-height: 30px;
+  color: rgba(255, 255, 255, 0.7);
 }

@@ -1,18 +1,29 @@
 $(function () {
-  $('input[name="birthday"]').daterangepicker(
-    {
-      singleDatePicker: true,
-      showDropdowns: true,
-      minYear: 1901,
-      maxYear: parseInt(moment().format('YYYY'), 10),
-      locale: {
-        format: 'DD-MM-YYYY',
-      },
+  $('input[name="birthday"]').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: moment().get('year'),
+    maxYear: moment().get('year') + 10,
+    locale: {
+      format: 'DD / MM / YYYY',
+      daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      monthNames: [
+        'Январь',
+        'Февраль',
+        'Март',
+        'Апрель',
+        'Май',
+        'Июнь',
+        'Июль',
+        'Август',
+        'Сентябрь',
+        'Октябрь',
+        'Ноябрь',
+        'Декабрь',
+      ],
+      firstDay: 1,
     },
-    function (start, end, label) {
-      var years = moment().diff(start, 'years');
-    },
-  );
+  });
 });
 
 $(function () {
@@ -33,15 +44,44 @@ $(function () {
         '14 дней': [moment().subtract(13, 'days'), moment()],
         '21 день': [moment().subtract(20, 'days'), moment()],
         '30 дней': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        '45 дней': [moment().subtract(44, 'days'), moment()],
         'Last Month': [
           moment().subtract(1, 'month').startOf('month'),
           moment().subtract(1, 'month').endOf('month'),
         ],
+      },
+      locale: {
+        format: 'DD / MM / YYYY',
       },
     },
     cb,
   );
 
   cb(start, end);
+});
+
+$('input[name="available-date"]').daterangepicker({
+  singleDatePicker: true,
+  showDropdowns: true,
+  minYear: moment().get('year'),
+  maxYear: moment().get('year') + 10,
+  locale: {
+    format: 'DD / MM / YYYY',
+    daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+    monthNames: [
+      'Январь',
+      'Февраль',
+      'Март',
+      'Апрель',
+      'Май',
+      'Июнь',
+      'Июль',
+      'Август',
+      'Сентябрь',
+      'Октябрь',
+      'Ноябрь',
+      'Декабрь',
+    ],
+    firstDay: 1,
+  },
 });
