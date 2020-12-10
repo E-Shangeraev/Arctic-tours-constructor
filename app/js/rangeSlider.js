@@ -8,14 +8,12 @@ const groupTo = document.querySelector('.group-to');
 $('.range-complexity').ionRangeSlider({
   type: 'single',
   skin: 'round',
-  min: 0,
-  max: 1000,
   onChange: function (data) {
-    if (data.from <= 3) {
+    if (data.from === 1) {
       complexity.textContent = 'низкая';
-    } else if (data.from > 3 && data.from <= 6) {
+    } else if (data.from === 2) {
       complexity.textContent = 'средняя';
-    } else if (data.from > 6) {
+    } else if (data.from === 3) {
       complexity.textContent = 'высокая';
     }
   },

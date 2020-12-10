@@ -1,0 +1,34 @@
+@import '../variables.scss';
+
+.ymaps-2-1-77-searchbox__input-cell,
+.ymaps-2-1-77-searchbox-list-button,
+.ymaps-2-1-77-searchbox__button-cell {
+  display: none !important;
+}
+.ymaps-2-1-77-searchbox-input__input {
+  background-color: #5c5c5c !important;
+  border: none !important;
+}
+.ymaps-2-1-77-searchbox__normal-layout:after {
+  box-shadow: none !important;
+  border: none !important;
+}
+.ymaps-2-1-77-islets_serp-popup__tail {
+  display: none;
+}
+.ymaps-2-1-77-islets_serp-popup {
+  padding: 0 !important;
+  border-radius: 7px !important;
+  width: fit-content !important;
+}
+.ymaps-2-1-77-islets_serp {
+  border: none !important;
+  border-radius: 7px !important;
+  background-color: #5c5c5c !important;
+  &::before {
+    display: none;
+  }
+}
+.ymaps-2-1-77-islets_serp__error-msg {
+  @include filter__title;
+}

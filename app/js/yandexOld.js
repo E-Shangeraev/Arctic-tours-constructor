@@ -13,55 +13,55 @@ function init() {
   });
   //==========Изменение внешнего вида маркера==========
 
-  // Создаём макет содержимого.
-  const MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
-    '<div style="color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>',
-  );
-  const myPlacemark = new ymaps.Placemark(
-    [69.342106, 88.384678],
-    {
-      hintContent: 'Собственный значок метки',
-      balloonContent: 'Кастомная метка',
-    },
-    {
-      // Опции.
-      // Необходимо указать данный тип макета.
-      iconLayout: 'default#image',
-      // Своё изображение иконки метки.
-      iconImageHref: 'svg/pointer.svg',
-      // Размеры метки.
-      iconImageSize: [48, 48],
-      // Смещение левого верхнего угла иконки относительно
-      // её "ножки" (точки привязки).
-      iconImageOffset: [0, 0],
-    },
-  );
-  const myPlacemarkWithContent = new ymaps.Placemark(
-    [69.398406, 88.154598],
-    {
-      hintContent: 'Озеро Хантайское',
-      balloonContent: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
-      iconContent: '2',
-    },
-    {
-      // Опции.
-      // Необходимо указать данный тип макета.
-      iconLayout: 'default#imageWithContent',
-      // Своё изображение иконки метки.
-      iconImageHref: 'svg/pointer.svg',
-      // Размеры метки.
-      iconImageSize: [48, 48],
-      // Смещение левого верхнего угла иконки относительно
-      // её "ножки" (точки привязки).
-      iconImageOffset: [0, 0],
-      // Смещение слоя с содержимым относительно слоя с картинкой.
-      iconContentOffset: [19, 6],
-      // Макет содержимого.
-      iconContentLayout: MyIconContentLayout,
-    },
-  );
+  //   // Создаём макет содержимого.
+  //   MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
+  //     '<div style="color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>',
+  //   ),
+  //   myPlacemark = new ymaps.Placemark(
+  //     [69.342106, 88.384678],
+  //     {
+  //       hintContent: 'Собственный значок метки',
+  //       balloonContent: 'Кастомная метка',
+  //     },
+  //     {
+  //       // Опции.
+  //       // Необходимо указать данный тип макета.
+  //       iconLayout: 'default#image',
+  //       // Своё изображение иконки метки.
+  //       iconImageHref: 'svg/pointer.svg',
+  //       // Размеры метки.
+  //       iconImageSize: [48, 48],
+  //       // Смещение левого верхнего угла иконки относительно
+  //       // её "ножки" (точки привязки).
+  //       iconImageOffset: [0, 0],
+  //     },
+  //   ),
+  //   myPlacemarkWithContent = new ymaps.Placemark(
+  //     [69.398406, 88.154598],
+  //     {
+  //       hintContent: 'Озеро Хантайское',
+  //       balloonContent: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
+  //       iconContent: '2',
+  //     },
+  //     {
+  //       // Опции.
+  //       // Необходимо указать данный тип макета.
+  //       iconLayout: 'default#imageWithContent',
+  //       // Своё изображение иконки метки.
+  //       iconImageHref: 'svg/pointer.svg',
+  //       // Размеры метки.
+  //       iconImageSize: [48, 48],
+  //       // Смещение левого верхнего угла иконки относительно
+  //       // её "ножки" (точки привязки).
+  //       iconImageOffset: [0, 0],
+  //       // Смещение слоя с содержимым относительно слоя с картинкой.
+  //       iconContentOffset: [19, 6],
+  //       // Макет содержимого.
+  //       iconContentLayout: MyIconContentLayout,
+  //     },
+  //   );
 
-  myMap.geoObjects.add(myPlacemark).add(myPlacemarkWithContent);
+  // myMap.geoObjects.add(myPlacemark).add(myPlacemarkWithContent),
   //===================================================
 
   //====== Поисковые подсказки по своим данным ========
@@ -91,7 +91,6 @@ function init() {
       return ymaps.vow.resolve(arrayResult);
     },
   };
-
   const suggestView = new ymaps.SuggestView('suggest', { provider: myProvider, results: 3 });
 
   //===================================================
@@ -130,19 +129,8 @@ function init() {
     },
   });
 
+  // // Добавляем контрол в верхний правый угол,
   myMap.controls.add(mySearchControl);
-
-  const searchBar = document.querySelector('#suggest');
-
-  searchBar.addEventListener('input', () => {
-    const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
-    ySearchBar.value = searchBar.value;
-  });
-
-  searchBar.addEventListener('change', () => {
-    const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
-    mySearchControl.search(ySearchBar.value);
-  });
 
   //===================================================
 }
