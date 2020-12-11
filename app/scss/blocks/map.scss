@@ -57,3 +57,66 @@
     outline: none;
   }
 }
+
+.hint {
+  @include filter__title;
+  display: inline-block;
+  padding: 5px;
+  height: 35px;
+  position: relative;
+  left: -10px;
+  width: 195px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #5c5c5c;
+  border: 1px solid #cdb7b5;
+  border-radius: 7px;
+}
+.baloon {
+  @include filter__item;
+  padding: 0;
+  margin: 0 !important;
+  background-color: #5c5c5c;
+}
+
+.popover {
+  @include filter__item;
+  display: block;
+  padding: 10px;
+  background-color: rgba(26, 26, 26, 0.75);
+  backdrop-filter: blur(5px);
+  border-radius: 7px;
+  height: 300px;
+}
+.popover__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid $red;
+}
+.popover .close {
+  padding: 2px;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  text-shadow: none;
+  color: #ffffff;
+  border: 1px solid #cdb7b5;
+  border-radius: 50%;
+}
+.popover__title {
+  @include filter__title;
+  margin: 0;
+  text-align: center;
+}
+.popover__content {
+  padding: 20px 0;
+}
+.popover__img {
+  margin-bottom: 20px;
+  border-radius: 7px;
+}
+.btn {
+  margin-top: 10px;
+}

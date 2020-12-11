@@ -8,7 +8,7 @@ function init() {
     center: [69.342106, 88.174678],
     // Уровень масштабирования. Допустимые значения:
     // от 0 (весь мир) до 19.
-    controls: [],
+    controls: ['zoomControl'],
     zoom: 12,
   });
   //==========Изменение внешнего вида маркера==========
@@ -36,14 +36,104 @@ function init() {
       iconImageOffset: [0, 0],
     },
   );
+
+  //================= Кастомный хинт ====================
+
+  const HintLayout = ymaps.templateLayoutFactory.createClass(
+    `
+    <div class='hint'>
+      <b>{{ properties.object }}</b> <br/>
+    </div>`,
+    {
+      // Определяем метод getShape, который
+      // будет возвращать размеры макета хинта.
+      // Это необходимо для того, чтобы хинт автоматически
+      // сдвигал позицию при выходе за пределы карты.
+      getShape: function () {
+        var el = this.getElement(),
+          result = null;
+        if (el) {
+          var firstChild = el.firstChild;
+          result = new ymaps.shape.Rectangle(
+            new ymaps.geometry.pixel.Rectangle([
+              [0, 0],
+              [firstChild.offsetWidth, firstChild.offsetHeight],
+            ]),
+          );
+        }
+        return result;
+      },
+    },
+  );
+
+  //======================================================
+
+  //================= Кастомный балун ====================
+
+  const MyBalloonLayout = ymaps.templateLayoutFactory.createClass(
+    `
+    <div class="popover top">
+      <header class="popover__header">
+        <h3 class="popover__title">{{properties.name}}</h3><br />
+        <a class="close" href="#">&times;</a>
+      </header>
+      <div class="arrow"></div>
+      <div class="popover-inner">
+        $[[options.contentLayout observeSize minWidth=235 maxWidth=235 maxHeight=350]]
+      </div>
+    </div>
+    `,
+    {
+      build: function () {
+        this.constructor.superclass.build.call(this);
+
+        this._$element = $('.popover', this.getParentElement());
+
+        this.applyElementOffset();
+
+        this._$element.find('.close').on('click', $.proxy(this.onCloseClick, this));
+      },
+      applyElementOffset: function () {
+        this._$element.css({
+          left: -(this._$element[0].offsetWidth / 2),
+          top: -(this._$element[0].offsetHeight + this._$element.find('.arrow')[0].offsetHeight),
+        });
+      },
+      onCloseClick: function (e) {
+        e.preventDefault();
+
+        this.events.fire('userclose');
+      },
+      _isElement: function (element) {
+        return element && element[0] && element.find('.arrow')[0];
+      },
+    },
+  );
+
+  const MyBalloonContentLayout = ymaps.templateLayoutFactory.createClass(
+    `
+    <div class="popover__content">
+      <img class="popover__img" src="$[properties.balloonImage]" />
+      <div class="popover__text">$[properties.balloonContent]</div>
+    </div>
+    `,
+  );
+
+  //======================================================
+
   const myPlacemarkWithContent = new ymaps.Placemark(
     [69.398406, 88.154598],
     {
-      hintContent: 'Озеро Хантайское',
+      object: 'Озеро Хантайское',
+      name: 'Озеро Хантайское',
+      balloonImage: '../img/tours/1.jpg',
       balloonContent: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
-      iconContent: '2',
     },
     {
+      hintLayout: HintLayout,
+      balloonLayout: MyBalloonLayout,
+      balloonContentLayout: MyBalloonContentLayout,
+      iconContent: '2',
       // Опции.
       // Необходимо указать данный тип макета.
       iconLayout: 'default#imageWithContent',
