@@ -11,31 +11,6 @@ function init() {
     controls: ['zoomControl'],
     zoom: 12,
   });
-  //==========Изменение внешнего вида маркера==========
-
-  // Создаём макет содержимого.
-  const MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
-    '<div style="color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>',
-  );
-  const myPlacemark = new ymaps.Placemark(
-    [69.342106, 88.384678],
-    {
-      hintContent: 'Собственный значок метки',
-      balloonContent: 'Кастомная метка',
-    },
-    {
-      // Опции.
-      // Необходимо указать данный тип макета.
-      iconLayout: 'default#image',
-      // Своё изображение иконки метки.
-      iconImageHref: 'svg/pointer.svg',
-      // Размеры метки.
-      iconImageSize: [48, 48],
-      // Смещение левого верхнего угла иконки относительно
-      // её "ножки" (точки привязки).
-      iconImageOffset: [0, 0],
-    },
-  );
 
   //================= Кастомный хинт ====================
 
@@ -86,11 +61,8 @@ function init() {
     {
       build: function () {
         this.constructor.superclass.build.call(this);
-
         this._$element = $('.popover', this.getParentElement());
-
         this.applyElementOffset();
-
         this._$element.find('.close').on('click', $.proxy(this.onCloseClick, this));
       },
       applyElementOffset: function () {
@@ -101,7 +73,6 @@ function init() {
       },
       onCloseClick: function (e) {
         e.preventDefault();
-
         this.events.fire('userclose');
       },
       _isElement: function (element) {
@@ -121,37 +92,50 @@ function init() {
 
   //======================================================
 
-  const myPlacemarkWithContent = new ymaps.Placemark(
-    [69.398406, 88.154598],
-    {
-      object: 'Озеро Хантайское',
-      name: 'Озеро Хантайское',
-      balloonImage: '../img/tours/1.jpg',
-      balloonContent: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
-    },
-    {
-      hintLayout: HintLayout,
-      balloonLayout: MyBalloonLayout,
-      balloonContentLayout: MyBalloonContentLayout,
-      iconContent: '2',
-      // Опции.
-      // Необходимо указать данный тип макета.
-      iconLayout: 'default#imageWithContent',
-      // Своё изображение иконки метки.
-      iconImageHref: 'svg/pointer.svg',
-      // Размеры метки.
-      iconImageSize: [48, 48],
-      // Смещение левого верхнего угла иконки относительно
-      // её "ножки" (точки привязки).
-      iconImageOffset: [0, 0],
-      // Смещение слоя с содержимым относительно слоя с картинкой.
-      iconContentOffset: [19, 6],
-      // Макет содержимого.
-      iconContentLayout: MyIconContentLayout,
-    },
-  );
+  // const createPoint = (coords, name, image, content) => {
+  //   const p = new ymaps.Placemark(
+  //     coords,
+  //     {
+  //       object: name,
+  //       name: name,
+  //       balloonImage: image,
+  //       balloonContent: content,
+  //     },
+  //     {
+  //       hintLayout: HintLayout,
+  //       balloonLayout: MyBalloonLayout,
+  //       balloonContentLayout: MyBalloonContentLayout,
+  //       iconContent: '2',
+  //       // Опции.
+  //       // Необходимо указать данный тип макета.
+  //       iconLayout: 'default#imageWithContent',
+  //       // Своё изображение иконки метки.
+  //       iconImageHref: 'svg/pointer.svg',
+  //       // Размеры метки.
+  //       iconImageSize: [48, 48],
+  //       // Смещение левого верхнего угла иконки относительно
+  //       // её "ножки" (точки привязки).
+  //       iconImageOffset: [0, 0],
+  //       // Смещение слоя с содержимым относительно слоя с картинкой.
+  //       iconContentOffset: [19, 6],
+  //     },
+  //   );
+  //   myMap.geoObjects.add(p);
+  // };
 
-  myMap.geoObjects.add(myPlacemark).add(myPlacemarkWithContent);
+  // createPoint(
+  //   [69.398406, 88.154598],
+  //   'Озеро Хантайское',
+  //   '../img/tours/1.jpg',
+  //   'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
+  // );
+
+  // createPoint(
+  //   [69.332106, 88.174678],
+  //   'Плато Путорана',
+  //   '../img/tours/2.jpg',
+  //   'Lorem ipsum dolor sit, amet consectetur adipisicing elit.',
+  // );
   //===================================================
 
   //====== Поисковые подсказки по своим данным ========
@@ -192,17 +176,57 @@ function init() {
   const myCollection = new ymaps.GeoObjectCollection();
   // Создает массив с данными.
   const myPoints = [
-    { coords: [69.341106, 88.174678], text: 'Озеро Хантайское' },
-    { coords: [69.332106, 88.174678], text: 'Плато Путорана' },
-    { coords: [69.354106, 88.174678], text: 'Город Дудинка' },
+    {
+      coords: [69.341106, 88.174678],
+      name: 'Озеро Хантайское',
+      image: 'img/tours/1.jpg',
+      text: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
+    },
+    {
+      coords: [69.398406, 88.154598],
+      name: 'Плато Путорана',
+      image: 'img/tours/2.jpg',
+      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+    },
+    {
+      coords: [69.354106, 88.174678],
+      name: 'Город Дудинка',
+      image: 'img/tours/3.jpg',
+      text:
+        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
+    },
   ];
 
   // Заполняем коллекцию данными.
   myPoints.forEach((point) => {
     myCollection.add(
-      new ymaps.Placemark(point.coords, {
-        balloonContentBody: point.text,
-      }),
+      new ymaps.Placemark(
+        point.coords,
+        {
+          object: point.name,
+          name: point.name,
+          balloonImage: point.image,
+          balloonContent: point.text,
+        },
+        {
+          hintLayout: HintLayout,
+          balloonLayout: MyBalloonLayout,
+          balloonContentLayout: MyBalloonContentLayout,
+          iconContent: '2',
+          // Опции.
+          // Необходимо указать данный тип макета.
+          iconLayout: 'default#imageWithContent',
+          // Своё изображение иконки метки.
+          iconImageHref: 'svg/pointer.svg',
+          // Размеры метки.
+          iconImageSize: [48, 48],
+          // Смещение левого верхнего угла иконки относительно
+          // её "ножки" (точки привязки).
+          iconImageOffset: [-23, -42],
+          // Смещение слоя с содержимым относительно слоя с картинкой.
+          iconContentOffset: [19, 6],
+        },
+      ),
     );
   });
   // Добавляем коллекцию меток на карту.
@@ -233,6 +257,91 @@ function init() {
     const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
     mySearchControl.search(ySearchBar.value);
   });
+
+  //===================================================
+
+  //================== Маршрутизация ==================
+
+  // const createRoute = () => {
+  //   const route = new ymaps.multiRouter.MultiRoute(
+  //     {
+  //       // Точки маршрута.
+  //       // Обязательное поле.
+  //       referencePoints: [
+  //         [69.341106, 88.174678],
+  //         [69.354106, 88.174678],
+  //         [69.398406, 88.154598],
+  //       ],
+  //     },
+  //     {
+  //       hintLayout: HintLayout,
+  //       balloonLayout: MyBalloonLayout,
+  //       balloonContentLayout: MyBalloonContentLayout,
+  //       iconContent: '2',
+  //       // Опции.
+  //       // Необходимо указать данный тип макета.
+  //       iconLayout: 'default#imageWithContent',
+  //       // Своё изображение иконки метки.
+  //       iconImageHref: 'svg/pointer.svg',
+  //       // Размеры метки.
+  //       iconImageSize: [48, 48],
+  //       // Смещение левого верхнего угла иконки относительно
+  //       // её "ножки" (точки привязки).
+  //       iconImageOffset: [0, 0],
+  //       // Смещение слоя с содержимым относительно слоя с картинкой.
+  //       iconContentOffset: [19, 6],
+
+  //       // Внешний вид путевых точек.
+  //       // Задаем собственную картинку для последней путевой точки.
+  //       wayPointIconLayout: 'default#image',
+  //       wayPointIconImageHref: 'svg/pointer.svg',
+  //       // Внешний вид линии активного маршрута.
+  //       routeActiveStrokeWidth: 3,
+  //       routeActiveStrokeStyle: 'solid',
+  //       routeActiveStrokeColor: '#2B4761',
+  //       // Внешний вид линий альтернативных маршрутов.
+  //       routeStrokeStyle: 'dot',
+  //       routeStrokeWidth: 3,
+  //       // Автоматически устанавливать границы карты так,
+  //       // чтобы маршрут был виден целиком.
+  //       boundsAutoApply: true,
+  //     },
+  //   );
+
+  //   // Добавление маршрута на карту.
+  //   myMap.geoObjects.add(multiRoute);
+  // };
+
+  // Создание экземпляра маршрута.
+  const multiRoute = new ymaps.multiRouter.MultiRoute(
+    {
+      // Точки маршрута.
+      // Обязательное поле.
+      referencePoints: [
+        [69.341106, 88.174678],
+        [69.354106, 88.174678],
+        [69.398406, 88.154598],
+      ],
+    },
+    {
+      // Внешний вид путевых точек.
+      // Убираем отображение путевой точки.
+      wayPointIconLayout: '',
+      // Внешний вид линии активного маршрута.
+      routeActiveStrokeWidth: 3,
+      routeActiveStrokeStyle: 'solid',
+      routeActiveStrokeColor: '#2B4761',
+      // Внешний вид линий альтернативных маршрутов.
+      routeStrokeStyle: 'dot',
+      routeStrokeWidth: 3,
+      // Автоматически устанавливать границы карты так,
+      // чтобы маршрут был виден целиком.
+      boundsAutoApply: true,
+    },
+  );
+
+  // Добавление маршрута на карту.
+  myMap.geoObjects.add(multiRoute);
 
   //===================================================
 }
@@ -267,13 +376,14 @@ CustomSearchProvider.prototype.geocode = function (request, options) {
   points = points.splice(offset, limit);
   // Добавляем точки в результирующую коллекцию.
   for (var i = 0, l = points.length; i < l; i++) {
-    var point = points[i],
-      coords = point.coords,
-      text = point.text;
+    const point = points[i];
+    const coords = point.coords;
+    const text = point.text;
+    const name = point.name;
 
     geoObjects.add(
       new ymaps.Placemark(coords, {
-        name: text + ' name',
+        name: name + ' name',
         description: text + ' description',
         balloonContentBody: '<p>' + text + '</p>',
         boundedBy: [coords, coords],
