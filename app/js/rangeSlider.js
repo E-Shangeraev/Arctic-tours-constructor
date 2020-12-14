@@ -15,6 +15,8 @@ $('.range-complexity').ionRangeSlider({
       complexity.textContent = 'средняя';
     } else if (data.from === 3) {
       complexity.textContent = 'высокая';
+    } else {
+      complexity.textContent = 'любая';
     }
   },
 });

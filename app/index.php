@@ -38,9 +38,11 @@
                   aria-haspreview="true"
                   aria-expanded="false"
                 >
-                  <span class="filter__item">Плато Путорана</span>
+                  <span class="filter__item">Не выбрано</span>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-menu territory" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Не выбрано</a>
+                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Плато Путорана</a>
                   <a class="dropdown-item" href="#">Озеро Лама</a>
                   <a class="dropdown-item" href="#">Озеро Хантайское</a>
@@ -91,9 +93,11 @@
                   aria-haspreview="true"
                   aria-expanded="false"
                 >
-                  <span class="filter__item">Лето</span>
+                  <span class="filter__item">Не выбрано</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Не выбрано</a>
+                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Лето</a>
                   <a class="dropdown-item" href="#">Осень</a>
                   <a class="dropdown-item" href="#">Зима</a>
@@ -114,15 +118,15 @@
 
             <div class="filter__complexity">
               <h3 class="filter__title">
-                Сложность тура: <span class="complexity" style="opacity: 0.4">средняя</span>
+                Сложность тура: <span class="complexity" style="opacity: 0.4">любая</span>
               </h3>
               <input
                 type="text"
                 class="range-complexity"
                 name="range-complexity"
-                data-min="1"
+                data-min="0"
                 data-max="3"
-                data-from="2"
+                data-from="0"
               />
             </div>
 
@@ -198,24 +202,7 @@
                 <h3 class="preview__title">Подходящие туры</h3>
                 <a href="#">Стрелка</a>
               </header>
-              <ul class="preview__list">
-                <li class="preview__tour" style="background-image: url('img/tours/1.jpg')">
-                  <h4 class="preview__tour-name">Горы без вершин. Путешествие на плато Путорана</h4>
-                  <a class="preview__tour-show" href="#">Подробно</a>
-                </li>
-                <li class="preview__tour" style="background-image: url('img/tours/2.jpg')">
-                  <h4 class="preview__tour-name">
-                    В сердце России. Сплав по Микчангде и восхождение на плато Путорана
-                  </h4>
-                  <a class="preview__tour-show" href="#">Подробно</a>
-                </li>
-                <li class="preview__tour" style="background-image: url('img/tours/3.jpg')">
-                  <h4 class="preview__tour-name">
-                    Енисейская экспедиция. Круиз из Красноярска в Дудинку
-                  </h4>
-                  <a class="preview__tour-show" href="#">Подробно</a>
-                </li>
-              </ul>
+              <ul class="preview__list"></ul>
             </div>
 
             <div class="map__search">
@@ -266,11 +253,6 @@
                   </li>
                 </ul>
               </div>
-
-              <!-- <p class="filter__available-date">
-                <h3 class="filter__title">Доступные даты заезда:</h3>
-                <input class="filter__dropdown" type="text" name="available-date" value="" />
-              </p> -->
 
               <div class="filter__total-price">
                 <h3 class="filter__title" style="text-transform: uppercase">Итоговая стоимость:</h3>
@@ -488,6 +470,10 @@
           </footer>
         </section>
       </section>
+
+      <?php require './all.php' ?>
+      <br>
+      <?php require './territory.php' ?>
     </main>
 
     <script

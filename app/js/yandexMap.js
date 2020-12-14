@@ -256,6 +256,7 @@ function init() {
   searchBar.addEventListener('change', () => {
     const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
     mySearchControl.search(ySearchBar.value);
+    searchBar.value = '';
   });
 
   //===================================================
@@ -365,18 +366,20 @@ CustomSearchProvider.prototype.geocode = function (request, options) {
     limit = options.results || 20;
 
   var points = [];
-  // Ищем в свойстве text каждого элемента массива.
+  // Ищем в свойстве text и name каждого элемента массива.
   for (var i = 0, l = this.points.length; i < l; i++) {
     var point = this.points[i];
     if (point.text.toLowerCase().indexOf(request.toLowerCase()) != -1) {
+      points.push(point);
+    }
+    if (point.name.toLowerCase().indexOf(request.toLowerCase()) != -1) {
       points.push(point);
     }
   }
   // При формировании ответа можно учитывать offset и limit.
   points = points.splice(offset, limit);
   // Добавляем точки в результирующую коллекцию.
-  for (var i = 0, l = points.length; i < l; i++) {
-    const point = points[i];
+  points.forEach((point) => {
     const coords = point.coords;
     const text = point.text;
     const name = point.name;
@@ -389,7 +392,7 @@ CustomSearchProvider.prototype.geocode = function (request, options) {
         boundedBy: [coords, coords],
       }),
     );
-  }
+  });
 
   deferred.resolve({
     // Геообъекты поисковой выдачи.
