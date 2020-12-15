@@ -49,5 +49,5 @@ if (isset($_POST['param'])) {
     while( $route = mysqli_fetch_assoc($routes) ) {
       $arr[] = $route;
     }
-    echo json_encode($arr);
+  echo json_encode($arr);
 }

@@ -1,5 +1,9 @@
 @import '../variables.scss';
 
+// .tour {
+//   display: none;
+// }
+
 .tour__header {
   display: flex;
   justify-content: space-between;
@@ -63,7 +67,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 0 9px 0;
+  padding: 30px 21px 9px 21px;
   border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 

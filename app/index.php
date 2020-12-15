@@ -200,7 +200,7 @@
             <div class="preview">
               <header class="preview__header">
                 <h3 class="preview__title">Подходящие туры</h3>
-                <a href="#">Стрелка</a>
+                <a href="#" class="preview__arrow"></a>
               </header>
               <ul class="preview__list"></ul>
             </div>
@@ -214,7 +214,7 @@
           </div>
         </section>
 
-        <section class="row tour">
+        <!-- <section class="row tour">
           <aside class="col-sm-3 filter__settings filter__settings--tour">
             <div class="tour__settings">
               <h3 class="filter__item" style="margin-bottom: 10px">Плато Путорана</h3>
@@ -468,12 +468,8 @@
               <a href="#">Памятка для туриста</a>
             </p>
           </footer>
-        </section>
+        </section> -->
       </section>
-
-      <?php require './all.php' ?>
-      <br>
-      <?php require './territory.php' ?>
     </main>
 
     <script
