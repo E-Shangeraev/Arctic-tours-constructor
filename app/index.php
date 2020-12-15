@@ -96,12 +96,12 @@
                   <span class="filter__item">Не выбрано</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Не выбрано</a>
+                  <a class="dropdown-item" href="#" data-season="Не выбрано">Не выбрано</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Лето</a>
-                  <a class="dropdown-item" href="#">Осень</a>
-                  <a class="dropdown-item" href="#">Зима</a>
-                  <a class="dropdown-item" href="#">Весна</a>
+                  <a class="dropdown-item" href="#" data-season="summer">Лето</a>
+                  <a class="dropdown-item" href="#" data-season="autumn">Осень</a>
+                  <a class="dropdown-item" href="#" data-season="winter">Зима</a>
+                  <a class="dropdown-item" href="#" data-season="spring">Весна</a>
                 </div>
               </div>
             </div>

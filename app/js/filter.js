@@ -1,9 +1,17 @@
 const btnToggle = document.querySelectorAll('.filter__toggle');
 const dropdownToggle = document.querySelectorAll('.btn.dropdown-toggle');
 const dropdownItem = document.querySelectorAll('.dropdown-item');
+const complexity = document.querySelector('.complexity');
+const from = document.querySelector('.price-from');
+const to = document.querySelector('.price-to');
+const priceMin = 30000;
+const priceMax = 1000000;
+
 const previewList = document.querySelector('.preview__list');
 const territoryFilter = document.querySelectorAll('.territory a');
 const typesFilter = document.querySelectorAll('.filter__types .filter__toggle');
+const filterSeason = document.querySelectorAll('.filter__season a');
+const filterComplexity = document.querySelector('.filter__complexity input');
 
 dropdownItem.forEach((drp) => {
   drp.addEventListener('click', () => {
@@ -41,6 +49,12 @@ function updatePreviewList(data) {
       previewList.insertAdjacentHTML('beforeend', li);
     });
   }
+  if (data.length === 0) {
+    previewList.insertAdjacentHTML(
+      'beforeend',
+      '<span class="preview__not-found">По вашему запросу ничего не найдено</span>',
+    );
+  }
 }
 
 // Передаваемый объект филтров
@@ -48,6 +62,10 @@ function updatePreviewList(data) {
 let objFilter = {
   territory: 'Не выбрано',
   types: [],
+  season: 'Не выбрано',
+  complexity: '0',
+  priceMin: priceMin,
+  priceMax: priceMax,
 };
 
 // Получение начальных данных по турам без фильтрации
@@ -116,3 +134,68 @@ function deleteObjFilterSetting(array, elem) {
     objFilter[array].splice(index, 1);
   }
 }
+
+// Фильтр - Сезон проведения туров
+
+filterSeason.forEach((item) => {
+  item.addEventListener('click', (e) => {
+    objFilter.season = e.target.dataset.season;
+    console.log(objFilter);
+    postData('filters/filter.php', objFilter).then((data) => {
+      console.log(data);
+      updatePreviewList(data);
+    });
+  });
+});
+
+// Фильтр - Сложность тура
+
+$('.range-complexity').ionRangeSlider({
+  type: 'single',
+  skin: 'round',
+  onFinish: function (data) {
+    if (data.from === 1) {
+      complexity.textContent = 'низкая';
+      objFilter.complexity = '1';
+    } else if (data.from === 2) {
+      complexity.textContent = 'средняя';
+      objFilter.complexity = '2';
+    } else if (data.from === 3) {
+      complexity.textContent = 'высокая';
+      objFilter.complexity = '3';
+    } else {
+      complexity.textContent = 'любая';
+      objFilter.complexity = '0';
+    }
+    console.log(objFilter);
+    postData('filters/filter.php', objFilter).then((data) => {
+      console.log(data);
+      updatePreviewList(data);
+    });
+  },
+});
+
+// Фильтр - Стоимость тура
+
+$('.range-price').ionRangeSlider({
+  type: 'double',
+  skin: 'round',
+  min: priceMin,
+  max: priceMax,
+  from: 200000,
+  step: 5000,
+  to: 750000,
+  onChange: function (data) {
+    from.textContent = data.from;
+    to.textContent = data.to;
+  },
+  onFinish: function (data) {
+    objFilter.priceMin = data.from;
+    objFilter.priceMax = data.to;
+    console.log(objFilter);
+    postData('filters/filter.php', objFilter).then((data) => {
+      console.log(data);
+      updatePreviewList(data);
+    });
+  },
+});

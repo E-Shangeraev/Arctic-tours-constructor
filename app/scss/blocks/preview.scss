@@ -66,3 +66,9 @@
     text-decoration: none;
   }
 }
+
+.preview__not-found {
+  @include filter__item;
+  display: inline-block;
+  line-height: 20px !important;
+}
