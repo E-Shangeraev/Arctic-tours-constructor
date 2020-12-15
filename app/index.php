@@ -55,25 +55,25 @@
             <div class="filter__types">
               <h3 class="filter__title">Искомые типы туров</h3>
               <ul>
-                <li class="filter__item">
+                <li class="filter__item" data-types = 'helicopter'>
                   Вертолетные туры
                   <button class="filter__toggle">
                     <span></span>
                   </button>
                 </li>
-                <li class="filter__item">
+                <li class="filter__item" data-types = 'cruise'>
                   Круизные туры
                   <button class="filter__toggle">
                     <span></span>
                   </button>
                 </li>
-                <li class="filter__item">
+                <li class="filter__item" data-types = 'hiking'>
                   Пешие туры
                   <button class="filter__toggle">
                     <span></span>
                   </button>
                 </li>
-                <li class="filter__item">
+                <li class="filter__item" data-types = 'other'>
                   Прочие туры
                   <button class="filter__toggle">
                     <span></span>

@@ -3,13 +3,7 @@ const dropdownToggle = document.querySelectorAll('.btn.dropdown-toggle');
 const dropdownItem = document.querySelectorAll('.dropdown-item');
 const previewList = document.querySelector('.preview__list');
 const territoryFilter = document.querySelectorAll('.territory a');
-
-btnToggle.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    btn.classList.toggle('filter__toggle--active');
-    btn.dataset.enabled = 'true';
-  });
-});
+const typesFilter = document.querySelectorAll('.filter__types .filter__toggle');
 
 dropdownItem.forEach((drp) => {
   drp.addEventListener('click', () => {
@@ -34,10 +28,9 @@ async function postData(url, obj) {
   return await result;
 }
 
-// Получение начальных данных по турам без фильтрации
-function defaultFilter(obj) {
-  postData('filters/all.php', obj).then((data) => {
-    console.log(data);
+function updatePreviewList(data) {
+  previewList.innerHTML = '';
+  if (data) {
     data.forEach((item) => {
       const li = `
       <li class="preview__tour" style="background-image: url('img/${item.image}')" data-tour_id="${item.tour_id}">
@@ -47,30 +40,79 @@ function defaultFilter(obj) {
       `;
       previewList.insertAdjacentHTML('beforeend', li);
     });
+  }
+}
+
+// Передаваемый объект филтров
+
+let objFilter = {
+  territory: 'Не выбрано',
+  types: [],
+};
+
+// Получение начальных данных по турам без фильтрации
+function defaultFilter(obj) {
+  postData('filters/filter.php', obj).then((data) => {
+    console.log(data);
+    updatePreviewList(data);
   });
 }
-defaultFilter({ name: 'good' });
+defaultFilter(objFilter);
 
 // Фильтр - Территория проведения туров
 
-let objFilter = {};
-
 territoryFilter.forEach((item) => {
   item.addEventListener('click', (e) => {
-    let objFilter = {};
-
     objFilter.territory = e.target.textContent;
-
-    postData('filters/territory.php', objFilter).then((data) => console.log(data));
-
-    // $.ajax({
-    //   type: 'POST',
-    //   url: 'filters/territory.php',
-    //   dataType: 'json',
-    //   data: 'param=' + JSON.stringify(objFilter),
-    //   success: function (html) {
-    //     console.log(html);
-    //   },
-    // });
+    postData('filters/filter.php', objFilter).then((data) => {
+      console.log(data);
+      updatePreviewList(data);
+    });
   });
 });
+
+// Фильтр - Искомые типы туров
+
+typesFilter.forEach((btn) => {
+  btn.dataset.enabled = 'false';
+
+  btn.addEventListener('click', (e) => {
+    btn.classList.toggle('filter__toggle--active');
+    const set = btn.parentElement.dataset.types;
+
+    if (btn.classList.contains('filter__toggle--active')) {
+      btn.dataset.enabled = 'true';
+      setObjFilterSetting('types', set);
+      console.log(objFilter);
+      postData('filters/filter.php', objFilter).then((data) => {
+        console.log(data);
+        updatePreviewList(data);
+      });
+    } else {
+      btn.dataset.enabled = 'false';
+      deleteObjFilterSetting('types', set);
+      console.log(objFilter);
+      postData('filters/filter.php', objFilter).then((data) => {
+        console.log(data);
+        updatePreviewList(data);
+      });
+    }
+  });
+});
+
+function setObjFilterSetting(array, elem) {
+  elem = elem.trim();
+
+  if (!objFilter[array].includes(elem)) {
+    objFilter[array].push(elem);
+  }
+}
+
+function deleteObjFilterSetting(array, elem) {
+  elem = elem.trim();
+  const index = objFilter[array].indexOf(elem);
+
+  if (index > -1) {
+    objFilter[array].splice(index, 1);
+  }
+}
