@@ -8,6 +8,7 @@ if (isset($_POST['param'])) {
 
   $route = mysqli_query($connection, "SELECT * FROM points WHERE tour_id = $tourId");
   while( $r = mysqli_fetch_assoc($route) ) {
-    echo json_encode($r);
+    $arr[] = $r;
   }
+  echo json_encode($arr);
 }

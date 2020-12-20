@@ -214,6 +214,10 @@ $('.range-price').ionRangeSlider({
 // Клик по кнопке "Подробнее" - раскрывается описание тура
 
 function showTourDescription(data) {
+  if (document.querySelector('.tour')) {
+    filter.removeChild(document.querySelector('.tour'));
+  }
+
   let actions = data.actions.split(';');
   actions = actions.map((item) => {
     return `
@@ -423,6 +427,7 @@ function showTourDescription(data) {
     </footer>
   </section>
   `;
+
   filter.insertAdjacentHTML('beforeend', tourDesc);
 
   $('.range-group-size').ionRangeSlider({
@@ -441,10 +446,9 @@ function showTourDescription(data) {
 previewList.addEventListener('click', (e) => {
   if (e.target.tagName != 'A') return;
   const tourId = e.target.parentElement.dataset.tour_id;
-  const objShow = { tourId };
+  const objShow = { tourId: tourId };
 
   postData('filters/tours_description.php', objShow).then((data) => showTourDescription(data));
-  postData('filters/points.php', objShow).then((data) => console.log(data));
 });
 
 // Сворачаивание/разворачивание превью списка туров
