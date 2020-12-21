@@ -1,27 +1,27 @@
 @import '../variables.scss';
 
-.ymaps-2-1-77-searchbox__input-cell,
-.ymaps-2-1-77-searchbox-list-button,
-.ymaps-2-1-77-searchbox__button-cell {
+.ymaps-2-1-78-searchbox__input-cell,
+.ymaps-2-1-78-searchbox-list-button,
+.ymaps-2-1-78-searchbox__button-cell {
   display: none !important;
 }
-.ymaps-2-1-77-searchbox-input__input {
+.ymaps-2-1-78-searchbox-input__input {
   background-color: #5c5c5c !important;
   border: none !important;
 }
-.ymaps-2-1-77-searchbox__normal-layout:after {
+.ymaps-2-1-78-searchbox__normal-layout:after {
   box-shadow: none !important;
   border: none !important;
 }
-.ymaps-2-1-77-islets_serp-popup__tail {
+.ymaps-2-1-78-islets_serp-popup__tail {
   display: none;
 }
-.ymaps-2-1-77-islets_serp-popup {
+.ymaps-2-1-78-islets_serp-popup {
   padding: 0 !important;
   border-radius: 7px !important;
   width: fit-content !important;
 }
-.ymaps-2-1-77-islets_serp {
+.ymaps-2-1-78-islets_serp {
   border: none !important;
   border-radius: 7px !important;
   background-color: #5c5c5c !important;
@@ -29,23 +29,23 @@
     display: none;
   }
 }
-.ymaps-2-1-77-islets_serp__error-msg {
+.ymaps-2-1-78-islets_serp__error-msg {
   @include filter__title;
 }
-// .ymaps-2-1-77-balloon__content {
+// .ymaps-2-1-78-balloon__content {
 //   padding: 0 !important;
 // }
 
-// .ymaps-2-1-77-islets_serp-popup {
+// .ymaps-2-1-78-islets_serp-popup {
 //   display: none !important;
 // }
 
-.ymaps-2-1-77-gotoymaps,
-.ymaps-2-1-77-gototech,
-.ymaps-2-1-77-copyright__content {
+.ymaps-2-1-78-gotoymaps,
+.ymaps-2-1-78-gototech,
+.ymaps-2-1-78-copyright__content {
   display: none !important;
 }
 
-.ymaps-2-1-77-controls__toolbar {
+.ymaps-2-1-78-controls__toolbar {
   display: none !important;
 }

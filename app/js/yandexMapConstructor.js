@@ -1,5 +1,6 @@
-const previewListConstructor = document.querySelector('.preview--constructor .preview__list');
+// const previewListConstructor = document.querySelector('.preview--constructor .preview__list');
 let myRouteArr = [];
+let locales = [];
 
 function init() {
   // Создание карты.
@@ -12,7 +13,7 @@ function init() {
     // Уровень масштабирования. Допустимые значения:
     // от 0 (весь мир) до 19.
     controls: ['zoomControl'],
-    zoom: 7,
+    zoom: 10,
   });
 
   //================= Кастомный хинт ====================
@@ -50,7 +51,7 @@ function init() {
 
   const MyBalloonLayout = ymaps.templateLayoutFactory.createClass(
     `
-    <div class="popover top popover--constructor">
+    <div class="popover top popover--constructor" data-loc_id='{{properties.locId}}'>
       <header class="popover__header">
         <h3 class="popover__title">{{properties.name}}</h3><br />
         <a class="close" href="#">&times;</a>
@@ -114,8 +115,10 @@ function init() {
 
       onAddClick: function () {
         console.log('this work!');
+        // let myRouteArr = [];
         const title = document.querySelector('.popover__title').textContent;
         const image = document.querySelector('.popover__img').src;
+        const locId = document.querySelector('.popover--constructor').dataset.loc_id;
 
         const li = `
           <li class="preview__tour" style="background-image: url('${image}')" data-tour_id="1">
@@ -130,8 +133,11 @@ function init() {
           return;
         }
         myRouteArr.push(li.trim());
-        myRouteArr = myRouteArr.toString().replace(/,/g, '');
-        previewListConstructor.insertAdjacentHTML('beforeend', myRouteArr);
+        previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
+        locales.push(locId);
+
+        console.log(myRouteArr);
+        console.log(locales);
       },
     },
   );
@@ -227,12 +233,14 @@ function init() {
       name: 'Озеро Хантайское',
       image: 'img/tours/1.jpg',
       text: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
+      locId: '1',
     },
     {
       coords: [69.398406, 88.154598],
       name: 'Плато Путорана',
       image: 'img/tours/2.jpg',
       text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+      locId: '2',
     },
     {
       coords: [69.354106, 88.174678],
@@ -240,6 +248,7 @@ function init() {
       image: 'img/tours/3.jpg',
       text:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
+      locId: '3',
     },
     {
       coords: [69.384106, 88.171328],
@@ -247,6 +256,7 @@ function init() {
       image: 'img/tours/1.jpg',
       text:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
+      locId: '4',
     },
     {
       coords: [69.395706, 88.172228],
@@ -254,13 +264,15 @@ function init() {
       image: 'img/tours/2.jpg',
       text:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
+      locId: '5',
     },
     {
-      coords: [69.395706, 89.171778],
+      coords: [69.395706, 89.171788],
       name: 'Красные Камни',
       image: 'img/tours/3.jpg',
       text:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
+      locId: '6',
     },
   ];
 
@@ -274,6 +286,7 @@ function init() {
           name: point.name,
           balloonImage: point.image,
           balloonContent: point.text,
+          locId: point.locId,
         },
         {
           hintLayout: HintLayout,
@@ -316,12 +329,12 @@ function init() {
   const searchBar = document.querySelector('#suggest');
 
   searchBar.addEventListener('input', () => {
-    const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
+    const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
     ySearchBar.value = searchBar.value;
   });
 
   searchBar.addEventListener('change', () => {
-    const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
+    const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
     mySearchControl.search(ySearchBar.value);
   });
 
@@ -390,35 +403,35 @@ function init() {
   // };
 
   // Создание экземпляра маршрута.
-  const multiRoute = new ymaps.multiRouter.MultiRoute(
-    {
-      // Точки маршрута.
-      // Обязательное поле.
-      referencePoints: [
-        [69.341106, 88.174678],
-        [69.354106, 88.174678],
-        [69.398406, 88.154598],
-      ],
-    },
-    {
-      // Внешний вид путевых точек.
-      // Убираем отображение путевой точки.
-      wayPointIconLayout: '',
-      // Внешний вид линии активного маршрута.
-      routeActiveStrokeWidth: 3,
-      routeActiveStrokeStyle: 'solid',
-      routeActiveStrokeColor: '#2B4761',
-      // Внешний вид линий альтернативных маршрутов.
-      routeStrokeStyle: 'dot',
-      routeStrokeWidth: 3,
-      // Автоматически устанавливать границы карты так,
-      // чтобы маршрут был виден целиком.
-      boundsAutoApply: true,
-    },
-  );
+  // const multiRoute = new ymaps.multiRouter.MultiRoute(
+  //   {
+  //     // Точки маршрута.
+  //     // Обязательное поле.
+  //     referencePoints: [
+  //       [69.341106, 88.174678],
+  //       [69.354106, 88.174678],
+  //       [69.398406, 88.154598],
+  //     ],
+  //   },
+  //   {
+  //     // Внешний вид путевых точек.
+  //     // Убираем отображение путевой точки.
+  //     wayPointIconLayout: '',
+  //     // Внешний вид линии активного маршрута.
+  //     routeActiveStrokeWidth: 3,
+  //     routeActiveStrokeStyle: 'solid',
+  //     routeActiveStrokeColor: '#2B4761',
+  //     // Внешний вид линий альтернативных маршрутов.
+  //     routeStrokeStyle: 'dot',
+  //     routeStrokeWidth: 3,
+  //     // Автоматически устанавливать границы карты так,
+  //     // чтобы маршрут был виден целиком.
+  //     boundsAutoApply: true,
+  //   },
+  // );
 
-  // Добавление маршрута на карту.
-  myMap.geoObjects.add(multiRoute);
+  // // Добавление маршрута на карту.
+  // myMap.geoObjects.add(multiRoute);
 
   //===================================================
 }
