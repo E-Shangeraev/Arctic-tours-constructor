@@ -117,6 +117,24 @@
   margin-bottom: 20px;
   border-radius: 7px;
 }
-.btn {
-  margin-top: 10px;
+.popover--constructor {
+  height: 350px;
+}
+// .popover__content {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+// }
+.popover__buttons {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+
+  .preview__tour-show {
+    margin: 0;
+  }
+}
+
+.popover__text {
+  margin-bottom: 20px;
 }

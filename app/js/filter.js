@@ -17,7 +17,7 @@ const filterComplexity = document.querySelector('.filter__complexity input');
 
 const preview = document.querySelector('.preview');
 const previewTourShow = document.querySelectorAll('.preview__tour-show');
-const previewArrow = document.querySelector('.preview__arrow');
+const previewArrow = document.querySelectorAll('.preview__arrow');
 
 const readyTab = document.querySelector('#pills-ready-tab');
 const constructorTab = document.querySelector('#pills-constructor-tab');
@@ -457,8 +457,11 @@ previewList.addEventListener('click', (e) => {
 
 preview.addEventListener('click', (e) => {
   if (e.target != previewArrow) return;
-  previewArrow.classList.toggle('preview__arrow--close');
-  previewList.classList.toggle('preview__list--close');
+
+  previewArrow.forEach((arrow) => {
+    arrow.classList.toggle('preview__arrow--close');
+    previewList.classList.toggle('preview__list--close');
+  });
 });
 
 // Переключение табов
