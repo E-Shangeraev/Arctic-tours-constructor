@@ -499,7 +499,6 @@
 
     <script src="js/filter.js"></script>
     <script src="js/dateRangePicker.js"></script>
-    <script src="js/rangeSlider.js"></script>
     <script src="js/yandexMap.js"></script>
   </body>
 </html>

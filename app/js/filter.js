@@ -6,8 +6,6 @@ const from = document.querySelector('.price-from');
 const to = document.querySelector('.price-to');
 const priceMin = 30000;
 const priceMax = 1000000;
-const groupFrom = document.querySelector('.group-from');
-const groupTo = document.querySelector('.group-to');
 
 const filter = document.querySelector('.filter');
 
@@ -430,6 +428,9 @@ function showTourDescription(data) {
   `;
 
   filter.insertAdjacentHTML('beforeend', tourDesc);
+
+  const groupFrom = document.querySelector('.group-from');
+  const groupTo = document.querySelector('.group-to');
 
   $('.range-group-size').ionRangeSlider({
     type: 'double',
