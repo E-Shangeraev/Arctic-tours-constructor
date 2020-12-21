@@ -154,111 +154,116 @@ function init() {
   }
 
   //===================================================
-
+  const previewList = document.querySelector('.preview__list');
   const previewTourShow = document.querySelectorAll('.preview__tour-show');
+  // console.log(previewTourShow);
 
-  previewTourShow.forEach((show) => {
-    show.addEventListener('click', (e) => {
-      if (e.target.tagName != 'A') return;
-      const tourId = e.target.parentElement.dataset.tour_id;
-      const objShow = { tourId: tourId };
-      // Создает коллекцию.
-      const myCollection = new ymaps.GeoObjectCollection();
-      let myPoints = [];
-      let points = [];
+  previewList.addEventListener('click', (e) => {
+    let a = e.target.closest('a');
 
-      postData('filters/points.php', objShow)
-        .then((data) => {
-          console.log(data);
+    if (!a) return;
 
-          data.forEach((item) => {
-            let coords = [];
-            coords.push(item.coords_x);
-            coords.push(item.coords_y);
-            points.push(coords);
+    if (!previewList.contains(a)) return;
 
-            let obj = {
-              coords,
-              name: item.name,
-              image: `img/${item.image}`,
-              text: item.text,
-            };
+    const tourId = a.parentElement.dataset.tour_id;
+    const objShow = { tourId: tourId };
+    // Создает коллекцию.
+    const myCollection = new ymaps.GeoObjectCollection();
+    let myPoints = [];
+    let points = [];
 
-            myPoints.push(obj);
-          });
-          console.log(myPoints);
+    postData('filters/points.php', objShow)
+      .then((data) => {
+        console.log(data);
 
-          // Заполняем коллекцию данными.
-          myPoints.forEach((point) => {
-            myCollection.add(
-              new ymaps.Placemark(
-                point.coords,
-                {
-                  object: point.name,
-                  name: point.name,
-                  balloonImage: point.image,
-                  balloonContent: point.text,
-                },
-                {
-                  hintLayout: HintLayout,
-                  balloonLayout: MyBalloonLayout,
-                  balloonContentLayout: MyBalloonContentLayout,
-                  iconContent: '2',
-                  // Опции.
-                  // Необходимо указать данный тип макета.
-                  iconLayout: 'default#imageWithContent',
-                  // Своё изображение иконки метки.
-                  iconImageHref: 'svg/pointer.svg',
-                  // Размеры метки.
-                  iconImageSize: [48, 48],
-                  // Смещение левого верхнего угла иконки относительно
-                  // её "ножки" (точки привязки).
-                  iconImageOffset: [-23, -42],
-                  // Смещение слоя с содержимым относительно слоя с картинкой.
-                  iconContentOffset: [19, 6],
-                },
-              ),
-            );
-          });
-          // Добавляем коллекцию меток на карту.
-          myMap.geoObjects.splice(0, 1, myCollection);
-          setSearchControl(myPoints);
+        data.forEach((item) => {
+          let coords = [];
+          coords.push(item.coords_x);
+          coords.push(item.coords_y);
+          points.push(coords);
 
-          return points;
-        })
-        .then((points) => {
-          console.log(points);
+          let obj = {
+            coords,
+            name: item.name,
+            image: `img/${item.image}`,
+            text: item.text,
+          };
 
-          //================== Маршрутизация ==================
-
-          // Создание экземпляра маршрута.
-          const multiRoute = new ymaps.multiRouter.MultiRoute(
-            {
-              // Точки маршрута.
-              referencePoints: points,
-            },
-            {
-              // Убираем отображение путевой точки.
-              wayPointIconLayout: '',
-              // Внешний вид линии активного маршрута.
-              routeActiveStrokeWidth: 3,
-              routeActiveStrokeStyle: 'solid',
-              routeActiveStrokeColor: '#2B4761',
-              // Внешний вид линий альтернативных маршрутов.
-              routeStrokeStyle: 'dot',
-              routeStrokeWidth: 0,
-              // Автоматически устанавливать границы карты так,
-              // чтобы маршрут был виден целиком.
-              boundsAutoApply: true,
-            },
-          );
-
-          // Добавление маршрута на карту.
-          myMap.geoObjects.splice(1, 1, multiRoute);
-
-          //===================================================
+          myPoints.push(obj);
         });
-    });
+        console.log(myPoints);
+
+        // Заполняем коллекцию данными.
+        myPoints.forEach((point) => {
+          myCollection.add(
+            new ymaps.Placemark(
+              point.coords,
+              {
+                object: point.name,
+                name: point.name,
+                balloonImage: point.image,
+                balloonContent: point.text,
+              },
+              {
+                hintLayout: HintLayout,
+                balloonLayout: MyBalloonLayout,
+                balloonContentLayout: MyBalloonContentLayout,
+                iconContent: '2',
+                // Опции.
+                // Необходимо указать данный тип макета.
+                iconLayout: 'default#imageWithContent',
+                // Своё изображение иконки метки.
+                iconImageHref: 'svg/pointer.svg',
+                // Размеры метки.
+                iconImageSize: [48, 48],
+                // Смещение левого верхнего угла иконки относительно
+                // её "ножки" (точки привязки).
+                iconImageOffset: [-23, -42],
+                // Смещение слоя с содержимым относительно слоя с картинкой.
+                iconContentOffset: [19, 6],
+              },
+            ),
+          );
+        });
+        // Добавляем коллекцию меток на карту.
+        myMap.geoObjects.splice(0, 1, myCollection);
+        setSearchControl(myPoints);
+
+        return points;
+      })
+      .then((points) => {
+        console.log(points);
+
+        //================== Маршрутизация ==================
+
+        // Создание экземпляра маршрута.
+        const multiRoute = new ymaps.multiRouter.MultiRoute(
+          {
+            // Точки маршрута.
+            referencePoints: points,
+          },
+          {
+            // Убираем отображение путевой точки.
+            wayPointIconLayout: '',
+            // Внешний вид линии активного маршрута.
+            routeActiveStrokeWidth: 3,
+            routeActiveStrokeStyle: 'solid',
+            routeActiveStrokeColor: '#2B4761',
+            // Внешний вид линий альтернативных маршрутов.
+            routeStrokeStyle: 'dot',
+            routeStrokeWidth: 0,
+            // Автоматически устанавливать границы карты так,
+            // чтобы маршрут был виден целиком.
+            boundsAutoApply: true,
+          },
+        );
+
+        // Добавление маршрута на карту.
+        myMap.geoObjects.splice(1, 1, multiRoute);
+        // ymaps.ready(init);
+        // myMap.update();
+        //===================================================
+      });
   });
 
   //===================================================

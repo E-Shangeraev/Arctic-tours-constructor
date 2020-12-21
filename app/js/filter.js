@@ -66,6 +66,7 @@ function updatePreviewList(data) {
       '<span class="preview__not-found">По вашему запросу ничего не найдено</span>',
     );
   }
+  console.log(previewTourShow);
 }
 
 // Передаваемый объект филтров
