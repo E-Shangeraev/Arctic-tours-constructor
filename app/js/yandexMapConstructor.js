@@ -2,6 +2,13 @@
 let myRouteArr = [];
 let locales = [];
 
+function setNumberToLoc() {
+  let locNum = document.querySelectorAll('.preview__tour-number');
+  locNum.forEach((item, index) => {
+    item.textContent = `${index + 1}. `;
+  });
+}
+
 function init() {
   // Создание карты.
   const myMap = new ymaps.Map('map-constructor', {
@@ -115,29 +122,43 @@ function init() {
 
       onAddClick: function () {
         console.log('this work!');
-        // let myRouteArr = [];
+
         const title = document.querySelector('.popover__title').textContent;
         const image = document.querySelector('.popover__img').src;
         const locId = document.querySelector('.popover--constructor').dataset.loc_id;
 
         const li = `
-          <li class="preview__tour" style="background-image: url('${image}')" data-tour_id="1">
-            <h4 class="preview__tour-name">${title}</h4>
+          <li class="preview__tour" style="background-image: url('${image}')" data-loc_id="${locId}">
+            <h4 class="preview__tour-name">
+              <span class="preview__tour-number">1</span>
+              ${title}
+            </h4>
             <p class="popover__buttons">
               <button class="preview__tour-show" id="remove">Убрать</button>
               <button class="preview__tour-show" id="more">Подробно</button>
             </p>
           </li>
         `;
-        if (myRouteArr.indexOf(li.trim()) > -1) {
-          return;
-        }
-        myRouteArr.push(li.trim());
-        previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
-        locales.push(locId);
 
-        console.log(myRouteArr);
-        console.log(locales);
+        const elem = document.querySelectorAll('#preview-constructor li');
+
+        if (previewListConstructor.children.length > 0) {
+          let isSet = false;
+          elem.forEach((item) => {
+            if (item.dataset.loc_id === locId) {
+              isSet = true;
+              return;
+            }
+          });
+
+          if (!isSet) {
+            previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
+          }
+        } else {
+          previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
+        }
+
+        setNumberToLoc();
       },
     },
   );

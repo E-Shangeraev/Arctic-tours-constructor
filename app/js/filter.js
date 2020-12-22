@@ -16,7 +16,7 @@ const filterSeason = document.querySelectorAll('.filter__season a');
 const filterComplexity = document.querySelector('.filter__complexity input');
 
 const preview = document.querySelector('.preview');
-const previewTourShow = document.querySelectorAll('.preview__tour-show');
+const previewTourShow = document.querySelector('.preview__tour-show');
 const previewArrow = document.querySelectorAll('.preview__arrow');
 
 const readyTab = document.querySelector('#pills-ready-tab');
