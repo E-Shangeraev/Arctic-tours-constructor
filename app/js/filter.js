@@ -468,7 +468,9 @@ preview.addEventListener('click', (e) => {
 
 constructorTab.addEventListener('click', () => {
   preview.style.display = 'none';
-  document.querySelector('.tour').remove();
+  if (document.querySelector('.tour')) {
+    document.querySelector('.tour').remove();
+  }
 });
 
 readyTab.addEventListener('click', () => {

@@ -244,11 +244,13 @@
       src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
-
+    
+    <script src="js/tabs.js"></script>
     <script src="js/filter.js"></script>
     <script src="js/dateRangePicker.js"></script>
     <script src="js/yandexMap.js"></script>
     <script src="js/yandexMapConstructor.js"></script>
     <script src="js/filterConstructor.js"></script>
+   
   </body>
 </html>
