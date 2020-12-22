@@ -142,12 +142,12 @@ function init() {
     const searchBar = document.querySelector('#suggest');
 
     searchBar.addEventListener('input', () => {
-      const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
+      const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
       ySearchBar.value = searchBar.value;
     });
 
     searchBar.addEventListener('change', () => {
-      const ySearchBar = document.querySelector('.ymaps-2-1-77-searchbox-input__input');
+      const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
       mySearchControl.search(ySearchBar.value);
       searchBar.value = '';
     });

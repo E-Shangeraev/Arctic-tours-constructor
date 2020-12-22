@@ -312,7 +312,7 @@ function showTourDescription(data) {
       <p class="tour__descr">${data.intro}</p>
 
       <div class="tour__promo">
-        <img class="tour__img" src="${data.image_1}" alt="Фотография с тура" />
+        <img class="tour__img" src="${data.image}" alt="Фотография с локации" />
         <p class="tour__warning warning">
           <b class="warning__title">ОБРАТИТЕ ВНИМАНИЕ!</b>
           <span class="warning__text">

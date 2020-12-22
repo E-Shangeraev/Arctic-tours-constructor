@@ -143,7 +143,17 @@ main {
   }
 }
 
-.filter__lodging-list {
+.filter__transport,
+.filter__lodging {
+  margin-bottom: 20px;
+
+  .filter__title {
+    margin-bottom: 15px;
+  }
+}
+
+.filter__lodging-list,
+.filter__transport-list {
   display: flex;
   justify-content: space-around;
   padding: 0 20px;
@@ -151,10 +161,13 @@ main {
   list-style: none;
 }
 
-.filter__lodging-item {
+.filter__lodging-item,
+.filter__transport-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 50%;
+  text-align: center;
 
   img {
     margin-bottom: 10px;
