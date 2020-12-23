@@ -91,6 +91,9 @@ function init() {
     },
   );
 
+  const myCoordsCollection = new ymaps.GeoObjectCollection();
+  let points = [];
+
   const MyBalloonContentLayout = ymaps.templateLayoutFactory.createClass(
     `
     <div class="popover__content">
@@ -131,6 +134,8 @@ function init() {
         const image = document.querySelector('.popover__img').src;
         const locId = document.querySelector('.popover--constructor').dataset.loc_id;
 
+        console.log(locId);
+
         const li = `
           <li class="preview__tour" style="background-image: url('${image}')" data-loc_id="${locId}">
             <h4 class="preview__tour-name">
@@ -163,6 +168,98 @@ function init() {
         }
 
         setNumberToLoc();
+
+        let coords = [];
+        postData('constructor/loc_coords.php', { locId })
+          .then((data) => {
+            data = data[0];
+            console.log(data);
+            coords.push(data.coords_x);
+            coords.push(data.coords_y);
+            console.log(coords);
+
+            let obj = {
+              coords,
+              name: data.name,
+              image: `img/${data.image}`,
+              text: data.text,
+            };
+
+            points.push(obj);
+            console.log(points);
+
+            // myCoordsCollection.add()
+
+            points.forEach((point) => {
+              myCoordsCollection.add(
+                new ymaps.Placemark(
+                  point.coords,
+                  {
+                    object: point.name,
+                    name: point.name,
+                    balloonImage: point.image,
+                    balloonContent: point.text,
+                  },
+                  {
+                    hintLayout: HintLayout,
+                    balloonLayout: MyBalloonLayout,
+                    balloonContentLayout: MyBalloonContentLayout,
+                    iconContent: '2',
+                    // Опции.
+                    // Необходимо указать данный тип макета.
+                    iconLayout: 'default#imageWithContent',
+                    // Своё изображение иконки метки.
+                    iconImageHref: 'svg/pointer.svg',
+                    // Размеры метки.
+                    iconImageSize: [48, 48],
+                    // Смещение левого верхнего угла иконки относительно
+                    // её "ножки" (точки привязки).
+                    iconImageOffset: [-23, -42],
+                    // Смещение слоя с содержимым относительно слоя с картинкой.
+                    iconContentOffset: [19, 6],
+                  },
+                ),
+              );
+            });
+
+            // Добавляем коллекцию меток на карту.
+            myMap.geoObjects.add(myCoordsCollection);
+
+            return points;
+          })
+          .then((points) => {
+            console.log(points);
+
+            //================== Маршрутизация ==================
+
+            // Создание экземпляра маршрута.
+            const multiRoute = new ymaps.multiRouter.MultiRoute(
+              {
+                // Точки маршрута.
+                referencePoints: points,
+              },
+              {
+                // Убираем отображение путевой точки.
+                wayPointIconLayout: '',
+                // Внешний вид линии активного маршрута.
+                routeActiveStrokeWidth: 3,
+                routeActiveStrokeStyle: 'solid',
+                routeActiveStrokeColor: '#2B4761',
+                // Внешний вид линий альтернативных маршрутов.
+                routeStrokeStyle: 'dot',
+                routeStrokeWidth: 0,
+                // Автоматически устанавливать границы карты так,
+                // чтобы маршрут был виден целиком.
+                boundsAutoApply: true,
+              },
+            );
+
+            // Добавление маршрута на карту.
+            myMap.geoObjects.splice(1, 1, multiRoute);
+            // ymaps.ready(init);
+            // myMap.update();
+            //===================================================
+          });
       },
 
       onMoreClick: function () {
@@ -173,54 +270,6 @@ function init() {
       },
     },
   );
-
-  //======================================================
-
-  // const createPoint = (coords, name, image, content) => {
-  //   const p = new ymaps.Placemark(
-  //     coords,
-  //     {
-  //       object: name,
-  //       name: name,
-  //       balloonImage: image,
-  //       balloonContent: content,
-  //     },
-  //     {
-  //       hintLayout: HintLayout,
-  //       balloonLayout: MyBalloonLayout,
-  //       balloonContentLayout: MyBalloonContentLayout,
-  //       iconContent: '2',
-  //       // Опции.
-  //       // Необходимо указать данный тип макета.
-  //       iconLayout: 'default#imageWithContent',
-  //       // Своё изображение иконки метки.
-  //       iconImageHref: 'svg/pointer.svg',
-  //       // Размеры метки.
-  //       iconImageSize: [48, 48],
-  //       // Смещение левого верхнего угла иконки относительно
-  //       // её "ножки" (точки привязки).
-  //       iconImageOffset: [0, 0],
-  //       // Смещение слоя с содержимым относительно слоя с картинкой.
-  //       iconContentOffset: [19, 6],
-  //     },
-  //   );
-  //   myMap.geoObjects.add(p);
-  // };
-
-  // createPoint(
-  //   [69.398406, 88.154598],
-  //   'Озеро Хантайское',
-  //   '../img/tours/1.jpg',
-  //   'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
-  // );
-
-  // createPoint(
-  //   [69.332106, 88.174678],
-  //   'Плато Путорана',
-  //   '../img/tours/2.jpg',
-  //   'Lorem ipsum dolor sit, amet consectetur adipisicing elit.',
-  // );
-  //===================================================
 
   //====== Поисковые подсказки по своим данным ========
 
@@ -283,6 +332,7 @@ function init() {
       myPoints.push(obj);
     });
     console.log(myPoints);
+    console.log(points);
 
     // Заполняем коллекцию данными.
     myPoints.forEach((point) => {
@@ -363,130 +413,6 @@ function init() {
     setFilter('constructor/filter-constructor.php', getMyPoints);
   });
 
-  console.log('setFilter');
-
-  // // Фильтр - Территория проведения туров
-  // territoryFilter.forEach((item) => {
-  //   item.addEventListener('click', (e) => {
-  //     objFilter.territory = e.target.textContent;
-  //     postData('constructor/filter-constructor.php', objFilter).then((data) => {
-  //       console.log(data);
-  //       getMyPoints(data);
-  //     });
-  //   });
-  // });
-
-  // // Фильтр - Искомые типы туров
-
-  // typesFilter.forEach((btn) => {
-  //   btn.dataset.enabled = 'false';
-
-  //   btn.addEventListener('click', (e) => {
-  //     btn.classList.toggle('filter__toggle--active');
-  //     const set = btn.parentElement.dataset.types;
-
-  //     if (btn.classList.contains('filter__toggle--active')) {
-  //       btn.dataset.enabled = 'true';
-  //       setObjFilterSetting('types', set);
-  //       console.log(objFilter);
-  //       postData('constructor/filter-constructor.php', objFilter).then((data) => {
-  //         console.log(data);
-  //         getMyPoints(data);
-  //       });
-  //     } else {
-  //       btn.dataset.enabled = 'false';
-  //       deleteObjFilterSetting('types', set);
-  //       console.log(objFilter);
-  //       postData('constructor/filter-constructor.php', objFilter).then((data) => {
-  //         console.log(data);
-  //         getMyPoints(data);
-  //       });
-  //     }
-  //   });
-  // });
-
-  // function setObjFilterSetting(array, elem) {
-  //   elem = elem.trim();
-
-  //   if (!objFilter[array].includes(elem)) {
-  //     objFilter[array].push(elem);
-  //   }
-  // }
-
-  // function deleteObjFilterSetting(array, elem) {
-  //   elem = elem.trim();
-  //   const index = objFilter[array].indexOf(elem);
-
-  //   if (index > -1) {
-  //     objFilter[array].splice(index, 1);
-  //   }
-  // }
-
-  // // Фильтр - Сезон проведения туров
-
-  // filterSeason.forEach((item) => {
-  //   item.addEventListener('click', (e) => {
-  //     objFilter.season = e.target.dataset.season;
-  //     console.log(objFilter);
-  //     postData('constructor/filter-constructor.php', objFilter).then((data) => {
-  //       console.log(data);
-  //       getMyPoints(data);
-  //     });
-  //   });
-  // });
-
-  // // Фильтр - Сложность тура
-
-  // $('.range-complexity').ionRangeSlider({
-  //   type: 'single',
-  //   skin: 'round',
-  //   onFinish: function (data) {
-  //     if (data.from === 1) {
-  //       complexity.textContent = 'низкая';
-  //       objFilter.complexity = '1';
-  //     } else if (data.from === 2) {
-  //       complexity.textContent = 'средняя';
-  //       objFilter.complexity = '2';
-  //     } else if (data.from === 3) {
-  //       complexity.textContent = 'высокая';
-  //       objFilter.complexity = '3';
-  //     } else {
-  //       complexity.textContent = 'любая';
-  //       objFilter.complexity = '0';
-  //     }
-  //     console.log(objFilter);
-  //     postData('constructor/filter-constructor.phpp', objFilter).then((data) => {
-  //       console.log(data);
-  //       getMyPoints(data);
-  //     });
-  //   },
-  // });
-
-  // // Фильтр - Стоимость тура
-
-  // $('.range-price').ionRangeSlider({
-  //   type: 'double',
-  //   skin: 'round',
-  //   min: priceMin,
-  //   max: priceMax,
-  //   from: 200000,
-  //   step: 5000,
-  //   to: 750000,
-  //   onChange: function (data) {
-  //     from.textContent = data.from;
-  //     to.textContent = data.to;
-  //   },
-  //   onFinish: function (data) {
-  //     objFilter.priceMin = data.from;
-  //     objFilter.priceMax = data.to;
-  //     console.log(objFilter);
-  //     postData('constructor/filter-constructor.php', objFilter).then((data) => {
-  //       console.log(data);
-  //       getMyPoints(data);
-  //     });
-  //   },
-  // });
-
   //===================================================
 
   //========= Добавление локации в маршрут ============
@@ -502,7 +428,7 @@ function init() {
   //================== Маршрутизация ==================
 
   // const createRoute = () => {
-  //   const route = new ymaps.multiRouter.MultiRoute(
+  //   const MultiRoute = new ymaps.multiRouter.MultiRoute(
   //     {
   //       // Точки маршрута.
   //       // Обязательное поле.
@@ -552,35 +478,35 @@ function init() {
   // };
 
   // Создание экземпляра маршрута.
-  // const multiRoute = new ymaps.multiRouter.MultiRoute(
-  //   {
-  //     // Точки маршрута.
-  //     // Обязательное поле.
-  //     referencePoints: [
-  //       [69.341106, 88.174678],
-  //       [69.354106, 88.174678],
-  //       [69.398406, 88.154598],
-  //     ],
-  //   },
-  //   {
-  //     // Внешний вид путевых точек.
-  //     // Убираем отображение путевой точки.
-  //     wayPointIconLayout: '',
-  //     // Внешний вид линии активного маршрута.
-  //     routeActiveStrokeWidth: 3,
-  //     routeActiveStrokeStyle: 'solid',
-  //     routeActiveStrokeColor: '#2B4761',
-  //     // Внешний вид линий альтернативных маршрутов.
-  //     routeStrokeStyle: 'dot',
-  //     routeStrokeWidth: 3,
-  //     // Автоматически устанавливать границы карты так,
-  //     // чтобы маршрут был виден целиком.
-  //     boundsAutoApply: true,
-  //   },
-  // );
+  const multiRoute = new ymaps.multiRouter.MultiRoute(
+    {
+      // Точки маршрута.
+      // Обязательное поле.
+      referencePoints: [
+        [69.341106, 88.174678],
+        [69.354106, 88.174678],
+        [69.398406, 88.154598],
+      ],
+    },
+    {
+      // Внешний вид путевых точек.
+      // Убираем отображение путевой точки.
+      wayPointIconLayout: '',
+      // Внешний вид линии активного маршрута.
+      routeActiveStrokeWidth: 3,
+      routeActiveStrokeStyle: 'solid',
+      routeActiveStrokeColor: '#2B4761',
+      // Внешний вид линий альтернативных маршрутов.
+      routeStrokeStyle: 'dot',
+      routeStrokeWidth: 3,
+      // Автоматически устанавливать границы карты так,
+      // чтобы маршрут был виден целиком.
+      boundsAutoApply: true,
+    },
+  );
 
-  // // Добавление маршрута на карту.
-  // myMap.geoObjects.add(multiRoute);
+  // Добавление маршрута на карту.
+  myMap.geoObjects.add(multiRoute);
 
   //===================================================
 }

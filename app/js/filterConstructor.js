@@ -1,10 +1,5 @@
 const previewListConstructor = document.querySelector('#preview-constructor .preview__list');
 
-const territoryFilter = document.querySelectorAll(`.constructor .territory a`);
-const typesFilter = document.querySelectorAll(`.constructor .filter__types .filter__toggle`);
-const filterSeason = document.querySelectorAll(`.constructor .filter__season a`);
-const filterComplexity = document.querySelector(`.constructor .filter__complexity input`);
-
 previewListConstructor.addEventListener('click', (e) => {
   let remove = e.target.closest('#remove');
 
@@ -174,14 +169,3 @@ function showLocaleDescription(data) {
     },
   });
 }
-
-// let objFilter1 = {
-//   territory: 'Не выбрано',
-//   types: [],
-//   season: 'Не выбрано',
-//   complexity: '0',
-//   priceMin: priceMin,
-//   priceMax: priceMax,
-// };
-
-// console.log(objFilter);
