@@ -26,116 +26,6 @@
     <main>
       <section class="filter container">
         <section class="row">
-          <aside class="col-sm-3 filter__settings">
-            <div class="filter__territory">
-              <h3 class="filter__title">Территория проведения туров</h3>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary dropdown-toggle filter__dropdown"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspreview="true"
-                  aria-expanded="false"
-                >
-                  <span class="filter__item">Не выбрано</span>
-                </button>
-                <div class="dropdown-menu territory" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Не выбрано</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Плато Путорана</a>
-                  <a class="dropdown-item" href="#">Озеро Лама</a>
-                  <a class="dropdown-item" href="#">Озеро Хантайское</a>
-                  <a class="dropdown-item" href="#">Пос. Снежногорск</a>
-                  <a class="dropdown-item" href="#">Город Дудинка</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="filter__types">
-              <h3 class="filter__title">Искомые типы туров</h3>
-              <ul>
-                <li class="filter__item" data-types = 'helicopter'>
-                  Вертолетные туры
-                  <button class="filter__toggle">
-                    <span></span>
-                  </button>
-                </li>
-                <li class="filter__item" data-types = 'cruise'>
-                  Круизные туры
-                  <button class="filter__toggle">
-                    <span></span>
-                  </button>
-                </li>
-                <li class="filter__item" data-types = 'hiking'>
-                  Пешие туры
-                  <button class="filter__toggle">
-                    <span></span>
-                  </button>
-                </li>
-                <li class="filter__item" data-types = 'other'>
-                  Прочие туры
-                  <button class="filter__toggle">
-                    <span></span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            <div class="filter__season">
-              <h3 class="filter__title">Сезон проведения туров</h3>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary dropdown-toggle filter__dropdown"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspreview="true"
-                  aria-expanded="false"
-                >
-                  <span class="filter__item">Не выбрано</span>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#" data-season="Не выбрано">Не выбрано</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#" data-season="summer">Лето</a>
-                  <a class="dropdown-item" href="#" data-season="autumn">Осень</a>
-                  <a class="dropdown-item" href="#" data-season="winter">Зима</a>
-                  <a class="dropdown-item" href="#" data-season="spring">Весна</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="filter__time">
-              <h3 class="filter__title">Время проведения туров</h3>
-              <input class="filter__dropdown" type="text" name="birthday" value="" />
-            </div>
-
-            <div class="filter__complexity">
-              <h3 class="filter__title">
-                Сложность тура: <span class="complexity" style="opacity: 0.4">любая</span>
-              </h3>
-              <input
-                type="text"
-                class="range-complexity"
-                name="range-complexity"
-                data-min="0"
-                data-max="3"
-                data-from="0"
-              />
-            </div>
-
-            <div class="filter__price">
-              <h3 class="filter__title">Стоимость тура:</h3>
-              <span class="filter__item">От </span>
-              <span class="filter__item filter__item--red price-from">200000</span>
-              <span class="filter__item"> до </span>
-              <span class="filter__item filter__item--red price-to">750000</span>
-              <span class="filter__item"> рублей</span>
-              <input type="text" class="range-price" name="range-price" data-grid="true" />
-            </div>
-          </aside>
-
           <div class="col-sm-9 d-flex flex-column filter__view">
             <div class="d-flex map__tabs">
               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -245,9 +135,8 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
     
-    <script src="js/tabs.js"></script>
+    <script src="js/aside.js"></script>
     <script src="js/filter.js"></script>
-    <script src="js/dateRangePicker.js"></script>
     <script src="js/yandexMap.js"></script>
     <script src="js/yandexMapConstructor.js"></script>
     <script src="js/filterConstructor.js"></script>

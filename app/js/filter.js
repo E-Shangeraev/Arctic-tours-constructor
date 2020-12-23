@@ -1,20 +1,11 @@
 const btnToggle = document.querySelectorAll('.filter__toggle');
 const dropdownToggle = document.querySelectorAll('.btn.dropdown-toggle');
 const dropdownItem = document.querySelectorAll('.dropdown-item');
-const complexity = document.querySelector('.complexity');
-const from = document.querySelector('.price-from');
-const to = document.querySelector('.price-to');
-const priceMin = 30000;
-const priceMax = 1000000;
 
 const filter = document.querySelector('.filter');
+const filterSettings = document.querySelector('.filter__settings');
 
 const previewList = document.querySelector('.preview__list');
-const territoryFilter = document.querySelectorAll('.territory a');
-const typesFilter = document.querySelectorAll('.filter__types .filter__toggle');
-const filterSeason = document.querySelectorAll('.filter__season a');
-const filterComplexity = document.querySelector('.filter__complexity input');
-
 const preview = document.querySelector('.preview');
 const previewTourShow = document.querySelector('.preview__tour-show');
 const previewArrow = document.querySelectorAll('.preview__arrow');
@@ -74,59 +65,164 @@ let objFilter = {
   types: [],
   season: 'Не выбрано',
   complexity: '0',
-  priceMin: priceMin,
-  priceMax: priceMax,
+  priceMin: 500,
+  priceMax: 1000000,
 };
 
-// Получение начальных данных по турам без фильтрации
-function defaultFilter(obj) {
-  postData('filters/filter.php', obj).then((data) => {
-    console.log(data);
-    updatePreviewList(data);
-  });
-}
-defaultFilter(objFilter);
+function setFilter(url, callback) {
+  const territoryFilter = document.querySelectorAll(`.territory a`);
+  const typesFilter = document.querySelectorAll(`.filter__types .filter__toggle`);
+  const filterSeason = document.querySelectorAll(`.filter__season a`);
+  const complexity = document.querySelector('.complexity');
+  const from = document.querySelector('.price-from');
+  const to = document.querySelector('.price-to');
+  // const filterComplexity = document.querySelector(`.filter__complexity input`);
 
-// Фильтр - Территория проведения туров
-
-territoryFilter.forEach((item) => {
-  item.addEventListener('click', (e) => {
-    objFilter.territory = e.target.textContent;
-    postData('filters/filter.php', objFilter).then((data) => {
+  // Получение начальных данных по турам без фильтрации
+  function defaultFilter(obj) {
+    postData(url, obj).then((data) => {
       console.log(data);
-      updatePreviewList(data);
+      callback(data);
+    });
+  }
+  defaultFilter(objFilter);
+
+  // Фильтр - Территория проведения туров
+  territoryFilter.forEach((item) => {
+    item.addEventListener('click', (e) => {
+      objFilter.territory = e.target.textContent;
+      postData(url, objFilter).then((data) => {
+        console.log(data);
+        callback(data);
+      });
     });
   });
-});
 
-// Фильтр - Искомые типы туров
+  // Фильтр - Искомые типы туров
 
-typesFilter.forEach((btn) => {
-  btn.dataset.enabled = 'false';
+  typesFilter.forEach((btn) => {
+    btn.dataset.enabled = 'false';
 
-  btn.addEventListener('click', (e) => {
-    btn.classList.toggle('filter__toggle--active');
-    const set = btn.parentElement.dataset.types;
+    btn.addEventListener('click', (e) => {
+      btn.classList.toggle('filter__toggle--active');
+      const set = btn.parentElement.dataset.types;
 
-    if (btn.classList.contains('filter__toggle--active')) {
-      btn.dataset.enabled = 'true';
-      setObjFilterSetting('types', set);
-      console.log(objFilter);
-      postData('filters/filter.php', objFilter).then((data) => {
-        console.log(data);
-        updatePreviewList(data);
-      });
-    } else {
-      btn.dataset.enabled = 'false';
-      deleteObjFilterSetting('types', set);
-      console.log(objFilter);
-      postData('filters/filter.php', objFilter).then((data) => {
-        console.log(data);
-        updatePreviewList(data);
-      });
-    }
+      if (btn.classList.contains('filter__toggle--active')) {
+        btn.dataset.enabled = 'true';
+        setObjFilterSetting('types', set);
+        console.log(objFilter);
+        postData(url, objFilter).then((data) => {
+          console.log(data);
+          callback(data);
+        });
+      } else {
+        btn.dataset.enabled = 'false';
+        deleteObjFilterSetting('types', set);
+        console.log(objFilter);
+        postData(url, objFilter).then((data) => {
+          console.log(data);
+          callback(data);
+        });
+      }
+    });
   });
-});
+
+  // Фильтр - Сезон проведения туров
+
+  filterSeason.forEach((item) => {
+    item.addEventListener('click', (e) => {
+      objFilter.season = e.target.dataset.season;
+      console.log(objFilter);
+      postData(url, objFilter).then((data) => {
+        console.log(data);
+        callback(data);
+      });
+    });
+  });
+
+  // Фильтр - время проведения туров
+
+  $(function () {
+    $('input[name="birthday"]').daterangepicker({
+      singleDatePicker: false,
+      showDropdowns: true,
+      minYear: moment().get('year'),
+      maxYear: moment().get('year') + 10,
+      locale: {
+        format: 'DD / MM / YYYY',
+        daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        monthNames: [
+          'Январь',
+          'Февраль',
+          'Март',
+          'Апрель',
+          'Май',
+          'Июнь',
+          'Июль',
+          'Август',
+          'Сентябрь',
+          'Октябрь',
+          'Ноябрь',
+          'Декабрь',
+        ],
+        firstDay: 1,
+      },
+    });
+  });
+
+  // Фильтр - Сложность тура
+
+  $(`.range-complexity`).ionRangeSlider({
+    type: 'single',
+    skin: 'round',
+    onFinish: function (data) {
+      if (data.from === 1) {
+        complexity.textContent = 'низкая';
+        objFilter.complexity = '1';
+      } else if (data.from === 2) {
+        complexity.textContent = 'средняя';
+        objFilter.complexity = '2';
+      } else if (data.from === 3) {
+        complexity.textContent = 'высокая';
+        objFilter.complexity = '3';
+      } else {
+        complexity.textContent = 'любая';
+        objFilter.complexity = '0';
+      }
+      console.log(objFilter);
+      postData(url, objFilter).then((data) => {
+        console.log(data);
+        callback(data);
+      });
+    },
+  });
+
+  // Фильтр - Стоимость тура
+
+  $(`.range-price`).ionRangeSlider({
+    type: 'double',
+    skin: 'round',
+    min: 500,
+    max: 1000000,
+    from: 500,
+    step: 5000,
+    to: 1000000,
+    onChange: function (data) {
+      from.textContent = data.from;
+      to.textContent = data.to;
+    },
+    onFinish: function (data) {
+      objFilter.priceMin = data.from;
+      objFilter.priceMax = data.to;
+      console.log(objFilter);
+      postData(url, objFilter).then((data) => {
+        console.log(data);
+        callback(data);
+      });
+    },
+  });
+}
+setFilter('filters/filter.php', updatePreviewList);
 
 function setObjFilterSetting(array, elem) {
   elem = elem.trim();
@@ -145,77 +241,13 @@ function deleteObjFilterSetting(array, elem) {
   }
 }
 
-// Фильтр - Сезон проведения туров
-
-filterSeason.forEach((item) => {
-  item.addEventListener('click', (e) => {
-    objFilter.season = e.target.dataset.season;
-    console.log(objFilter);
-    postData('filters/filter.php', objFilter).then((data) => {
-      console.log(data);
-      updatePreviewList(data);
-    });
-  });
-});
-
-// Фильтр - Сложность тура
-
-$('.range-complexity').ionRangeSlider({
-  type: 'single',
-  skin: 'round',
-  onFinish: function (data) {
-    if (data.from === 1) {
-      complexity.textContent = 'низкая';
-      objFilter.complexity = '1';
-    } else if (data.from === 2) {
-      complexity.textContent = 'средняя';
-      objFilter.complexity = '2';
-    } else if (data.from === 3) {
-      complexity.textContent = 'высокая';
-      objFilter.complexity = '3';
-    } else {
-      complexity.textContent = 'любая';
-      objFilter.complexity = '0';
-    }
-    console.log(objFilter);
-    postData('filters/filter.php', objFilter).then((data) => {
-      console.log(data);
-      updatePreviewList(data);
-    });
-  },
-});
-
-// Фильтр - Стоимость тура
-
-$('.range-price').ionRangeSlider({
-  type: 'double',
-  skin: 'round',
-  min: priceMin,
-  max: priceMax,
-  from: 200000,
-  step: 5000,
-  to: 750000,
-  onChange: function (data) {
-    from.textContent = data.from;
-    to.textContent = data.to;
-  },
-  onFinish: function (data) {
-    objFilter.priceMin = data.from;
-    objFilter.priceMax = data.to;
-    console.log(objFilter);
-    postData('filters/filter.php', objFilter).then((data) => {
-      console.log(data);
-      updatePreviewList(data);
-    });
-  },
-});
-
 // Клик по кнопке "Подробнее" - раскрывается описание тура
 
 function showTourDescription(data) {
   if (document.querySelector('.tour')) {
     filter.removeChild(document.querySelector('.tour'));
   }
+  console.log(data);
 
   let actions = data.actions.split(';');
   actions = actions.map((item) => {
@@ -312,7 +344,7 @@ function showTourDescription(data) {
       <p class="tour__descr">${data.intro}</p>
 
       <div class="tour__promo">
-        <img class="tour__img" src="${data.image}" alt="Фотография с локации" />
+        <img class="tour__img" src="${data.image_1}" alt="Фотография с локации" />
         <p class="tour__warning warning">
           <b class="warning__title">ОБРАТИТЕ ВНИМАНИЕ!</b>
           <span class="warning__text">
@@ -450,7 +482,10 @@ previewList.addEventListener('click', (e) => {
   const tourId = e.target.parentElement.dataset.tour_id;
   const objShow = { tourId: tourId };
 
-  postData('filters/tours_description.php', objShow).then((data) => showTourDescription(data));
+  postData('filters/tours_description.php', objShow).then((data) => {
+    console.log(data.actions);
+    showTourDescription(data);
+  });
 });
 
 // Сворачаивание/разворачивание превью списка туров
@@ -466,13 +501,13 @@ preview.addEventListener('click', (e) => {
 
 // Переключение табов
 
-constructorTab.addEventListener('click', () => {
-  preview.style.display = 'none';
-  if (document.querySelector('.tour')) {
-    document.querySelector('.tour').remove();
-  }
-});
-
 readyTab.addEventListener('click', () => {
   preview.style.display = 'block';
+  filterSettings.classList.remove('constructor');
+  filterSettings.classList.add('ready');
+
+  container.children[0].remove();
+  container.insertAdjacentHTML('afterbegin', filterReady);
+
+  setFilter('filters/filter.php', updatePreviewList);
 });

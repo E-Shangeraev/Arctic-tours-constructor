@@ -1,4 +1,3 @@
-// const previewListConstructor = document.querySelector('.preview--constructor .preview__list');
 let myRouteArr = [];
 let locales = [];
 
@@ -109,7 +108,9 @@ function init() {
         MyBalloonContentLayout.superclass.build.call(this);
         // А затем выполняем дополнительные действия.
         const add = $('#add');
+        const more = $('#more');
         add.bind('click', this.onAddClick);
+        more.bind('click', this.onMoreClick);
       },
       // Аналогично переопределяем функцию clear, чтобы снять
       // прослушивание клика при удалении макета с карты.
@@ -117,12 +118,15 @@ function init() {
         // Выполняем действия в обратном порядке - сначала снимаем слушателя,
         // а потом вызываем метод clear родительского класса.
         $('#add').unbind('click', this.onAddClick);
+        $('#more').unbind('click', this.onMoreClick);
         MyBalloonContentLayout.superclass.clear.call(this);
       },
 
       onAddClick: function () {
         console.log('this work!');
-
+        const previewListConstructor = document.querySelector(
+          '#preview-constructor .preview__list',
+        );
         const title = document.querySelector('.popover__title').textContent;
         const image = document.querySelector('.popover__img').src;
         const locId = document.querySelector('.popover--constructor').dataset.loc_id;
@@ -159,6 +163,13 @@ function init() {
         }
 
         setNumberToLoc();
+      },
+
+      onMoreClick: function () {
+        const locId = document.querySelector('.popover--constructor').dataset.loc_id;
+        const obj = { locId };
+
+        postData('constructor/loc_description.php', obj).then((data) => showTourDescription(data));
       },
     },
   );
@@ -245,119 +256,236 @@ function init() {
 
   //============== Добавление своих меток =============
 
-  // Создает коллекцию.
-  const myCollection = new ymaps.GeoObjectCollection();
   // Создает массив с данными.
-  const myPoints = [
-    {
-      coords: [69.341106, 88.174678],
-      name: 'Озеро Хантайское',
-      image: 'img/tours/1.jpg',
-      text: 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья',
-      locId: '1',
-    },
-    {
-      coords: [69.398406, 88.154598],
-      name: 'Плато Путорана',
-      image: 'img/tours/2.jpg',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      locId: '2',
-    },
-    {
-      coords: [69.354106, 88.174678],
-      name: 'Город Дудинка',
-      image: 'img/tours/3.jpg',
-      text:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
-      locId: '3',
-    },
-    {
-      coords: [69.384106, 88.171328],
-      name: 'Озеро Лама',
-      image: 'img/tours/1.jpg',
-      text:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
-      locId: '4',
-    },
-    {
-      coords: [69.395706, 88.172228],
-      name: 'Пос. Снежногорск',
-      image: 'img/tours/2.jpg',
-      text:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
-      locId: '5',
-    },
-    {
-      coords: [69.395706, 89.171788],
-      name: 'Красные Камни',
-      image: 'img/tours/3.jpg',
-      text:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?',
-      locId: '6',
-    },
-  ];
+  function getMyPoints(data) {
+    // Создает коллекцию.
+    const myCollection = new ymaps.GeoObjectCollection();
 
-  // Заполняем коллекцию данными.
-  myPoints.forEach((point) => {
-    myCollection.add(
-      new ymaps.Placemark(
-        point.coords,
-        {
-          object: point.name,
-          name: point.name,
-          balloonImage: point.image,
-          balloonContent: point.text,
-          locId: point.locId,
-        },
-        {
-          hintLayout: HintLayout,
-          balloonLayout: MyBalloonLayout,
-          balloonContentLayout: MyBalloonContentLayout,
-          iconContent: '2',
-          // Опции.
-          // Необходимо указать данный тип макета.
-          iconLayout: 'default#imageWithContent',
-          // Своё изображение иконки метки.
-          iconImageHref: 'svg/pointer-blue.svg',
-          // Размеры метки.
-          iconImageSize: [48, 48],
-          // Смещение левого верхнего угла иконки относительно
-          // её "ножки" (точки привязки).
-          iconImageOffset: [-23, -42],
-          // Смещение слоя с содержимым относительно слоя с картинкой.
-          iconContentOffset: [19, 6],
-        },
-      ),
-    );
+    console.log(data);
+
+    let myPoints = [];
+    let points = [];
+
+    data.forEach((item) => {
+      let coords = [];
+      coords.push(item.coords_x);
+      coords.push(item.coords_y);
+      points.push(coords);
+
+      let obj = {
+        coords,
+        name: item.name,
+        image: `img/${item.image}`,
+        text: item.preview_text,
+        locId: item.loc_id,
+      };
+
+      myPoints.push(obj);
+    });
+    console.log(myPoints);
+
+    // Заполняем коллекцию данными.
+    myPoints.forEach((point) => {
+      myCollection.add(
+        new ymaps.Placemark(
+          point.coords,
+          {
+            object: point.name,
+            name: point.name,
+            balloonImage: point.image,
+            balloonContent: point.text,
+            locId: point.locId,
+          },
+          {
+            hintLayout: HintLayout,
+            balloonLayout: MyBalloonLayout,
+            balloonContentLayout: MyBalloonContentLayout,
+            iconContent: '2',
+            // Опции.
+            // Необходимо указать данный тип макета.
+            iconLayout: 'default#imageWithContent',
+            // Своё изображение иконки метки.
+            iconImageHref: 'svg/pointer-blue.svg',
+            // Размеры метки.
+            iconImageSize: [48, 48],
+            // Смещение левого верхнего угла иконки относительно
+            // её "ножки" (точки привязки).
+            iconImageOffset: [-23, -42],
+            // Смещение слоя с содержимым относительно слоя с картинкой.
+            iconContentOffset: [19, 6],
+          },
+        ),
+      );
+    });
+    // Добавляем коллекцию меток на карту.
+    // myMap.geoObjects.add(myCollection);
+    myMap.geoObjects.splice(0, 1, myCollection);
+    console.log(myCollection);
+
+    // Создаем экземпляр класса ymaps.control.SearchControl
+    const mySearchControl = new ymaps.control.SearchControl({
+      options: {
+        // Заменяем стандартный провайдер данных (геокодер) нашим собственным.
+        provider: new CustomSearchProvider(myPoints),
+        // Не будем показывать еще одну метку при выборе результата поиска,
+        // т.к. метки коллекции myCollection уже добавлены на карту.
+        noPlacemark: true,
+        resultsPerPage: 5,
+      },
+    });
+
+    myMap.controls.add(mySearchControl);
+
+    const searchBar = document.querySelector('#suggest');
+
+    searchBar.addEventListener('input', () => {
+      const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
+      ySearchBar.value = searchBar.value;
+    });
+
+    searchBar.addEventListener('change', () => {
+      const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
+      mySearchControl.search(ySearchBar.value);
+    });
+  }
+  postData('constructor/filter-constructor.php', objFilter).then((data) => getMyPoints(data));
+
+  constructorTab.addEventListener('click', () => {
+    filterSettings.classList.remove('ready');
+    filterSettings.classList.add('constructor');
+    preview.style.display = 'none';
+    if (document.querySelector('.tour')) {
+      document.querySelector('.tour').remove();
+    }
+
+    container.children[0].remove();
+    container.insertAdjacentHTML('afterbegin', filterConstructor);
+    setFilter('constructor/filter-constructor.php', getMyPoints);
   });
-  // Добавляем коллекцию меток на карту.
-  myMap.geoObjects.add(myCollection);
 
-  // Создаем экземпляр класса ymaps.control.SearchControl
-  const mySearchControl = new ymaps.control.SearchControl({
-    options: {
-      // Заменяем стандартный провайдер данных (геокодер) нашим собственным.
-      provider: new CustomSearchProvider(myPoints),
-      // Не будем показывать еще одну метку при выборе результата поиска,
-      // т.к. метки коллекции myCollection уже добавлены на карту.
-      noPlacemark: true,
-      resultsPerPage: 5,
-    },
-  });
+  console.log('setFilter');
 
-  myMap.controls.add(mySearchControl);
+  // // Фильтр - Территория проведения туров
+  // territoryFilter.forEach((item) => {
+  //   item.addEventListener('click', (e) => {
+  //     objFilter.territory = e.target.textContent;
+  //     postData('constructor/filter-constructor.php', objFilter).then((data) => {
+  //       console.log(data);
+  //       getMyPoints(data);
+  //     });
+  //   });
+  // });
 
-  const searchBar = document.querySelector('#suggest');
+  // // Фильтр - Искомые типы туров
 
-  searchBar.addEventListener('input', () => {
-    const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
-    ySearchBar.value = searchBar.value;
-  });
+  // typesFilter.forEach((btn) => {
+  //   btn.dataset.enabled = 'false';
 
-  searchBar.addEventListener('change', () => {
-    const ySearchBar = document.querySelector('.ymaps-2-1-78-searchbox-input__input');
-    mySearchControl.search(ySearchBar.value);
-  });
+  //   btn.addEventListener('click', (e) => {
+  //     btn.classList.toggle('filter__toggle--active');
+  //     const set = btn.parentElement.dataset.types;
+
+  //     if (btn.classList.contains('filter__toggle--active')) {
+  //       btn.dataset.enabled = 'true';
+  //       setObjFilterSetting('types', set);
+  //       console.log(objFilter);
+  //       postData('constructor/filter-constructor.php', objFilter).then((data) => {
+  //         console.log(data);
+  //         getMyPoints(data);
+  //       });
+  //     } else {
+  //       btn.dataset.enabled = 'false';
+  //       deleteObjFilterSetting('types', set);
+  //       console.log(objFilter);
+  //       postData('constructor/filter-constructor.php', objFilter).then((data) => {
+  //         console.log(data);
+  //         getMyPoints(data);
+  //       });
+  //     }
+  //   });
+  // });
+
+  // function setObjFilterSetting(array, elem) {
+  //   elem = elem.trim();
+
+  //   if (!objFilter[array].includes(elem)) {
+  //     objFilter[array].push(elem);
+  //   }
+  // }
+
+  // function deleteObjFilterSetting(array, elem) {
+  //   elem = elem.trim();
+  //   const index = objFilter[array].indexOf(elem);
+
+  //   if (index > -1) {
+  //     objFilter[array].splice(index, 1);
+  //   }
+  // }
+
+  // // Фильтр - Сезон проведения туров
+
+  // filterSeason.forEach((item) => {
+  //   item.addEventListener('click', (e) => {
+  //     objFilter.season = e.target.dataset.season;
+  //     console.log(objFilter);
+  //     postData('constructor/filter-constructor.php', objFilter).then((data) => {
+  //       console.log(data);
+  //       getMyPoints(data);
+  //     });
+  //   });
+  // });
+
+  // // Фильтр - Сложность тура
+
+  // $('.range-complexity').ionRangeSlider({
+  //   type: 'single',
+  //   skin: 'round',
+  //   onFinish: function (data) {
+  //     if (data.from === 1) {
+  //       complexity.textContent = 'низкая';
+  //       objFilter.complexity = '1';
+  //     } else if (data.from === 2) {
+  //       complexity.textContent = 'средняя';
+  //       objFilter.complexity = '2';
+  //     } else if (data.from === 3) {
+  //       complexity.textContent = 'высокая';
+  //       objFilter.complexity = '3';
+  //     } else {
+  //       complexity.textContent = 'любая';
+  //       objFilter.complexity = '0';
+  //     }
+  //     console.log(objFilter);
+  //     postData('constructor/filter-constructor.phpp', objFilter).then((data) => {
+  //       console.log(data);
+  //       getMyPoints(data);
+  //     });
+  //   },
+  // });
+
+  // // Фильтр - Стоимость тура
+
+  // $('.range-price').ionRangeSlider({
+  //   type: 'double',
+  //   skin: 'round',
+  //   min: priceMin,
+  //   max: priceMax,
+  //   from: 200000,
+  //   step: 5000,
+  //   to: 750000,
+  //   onChange: function (data) {
+  //     from.textContent = data.from;
+  //     to.textContent = data.to;
+  //   },
+  //   onFinish: function (data) {
+  //     objFilter.priceMin = data.from;
+  //     objFilter.priceMax = data.to;
+  //     console.log(objFilter);
+  //     postData('constructor/filter-constructor.php', objFilter).then((data) => {
+  //       console.log(data);
+  //       getMyPoints(data);
+  //     });
+  //   },
+  // });
 
   //===================================================
 
@@ -479,7 +607,10 @@ CustomSearchProvider.prototype.geocode = function (request, options) {
   // Ищем в свойстве text каждого элемента массива.
   for (var i = 0, l = this.points.length; i < l; i++) {
     var point = this.points[i];
-    if (point.text.toLowerCase().indexOf(request.toLowerCase()) != -1) {
+    if (
+      point.name.toLowerCase().indexOf(request.toLowerCase()) != -1 ||
+      point.text.toLowerCase().indexOf(request.toLowerCase()) != -1
+    ) {
       points.push(point);
     }
   }
@@ -494,8 +625,8 @@ CustomSearchProvider.prototype.geocode = function (request, options) {
 
     geoObjects.add(
       new ymaps.Placemark(coords, {
-        name: name + ' name',
-        description: text + ' description',
+        name: name,
+        description: text,
         balloonContentBody: '<p>' + text + '</p>',
         boundedBy: [coords, coords],
       }),

@@ -1,5 +1,10 @@
 const previewListConstructor = document.querySelector('#preview-constructor .preview__list');
 
+const territoryFilter = document.querySelectorAll(`.constructor .territory a`);
+const typesFilter = document.querySelectorAll(`.constructor .filter__types .filter__toggle`);
+const filterSeason = document.querySelectorAll(`.constructor .filter__season a`);
+const filterComplexity = document.querySelector(`.constructor .filter__complexity input`);
+
 previewListConstructor.addEventListener('click', (e) => {
   let remove = e.target.closest('#remove');
 
@@ -25,12 +30,12 @@ previewListConstructor.addEventListener('click', (e) => {
 
   console.log(obj);
 
-  postData('constructor/loc_description.php', obj).then((data) => showTourDescription(data));
+  postData('constructor/loc_description.php', obj).then((data) => showLocaleDescription(data));
 
   console.log('Подробнее');
 });
 
-function showTourDescription(data) {
+function showLocaleDescription(data) {
   if (document.querySelector('.locale')) {
     filter.removeChild(document.querySelector('.locale'));
   }
@@ -169,3 +174,14 @@ function showTourDescription(data) {
     },
   });
 }
+
+// let objFilter1 = {
+//   territory: 'Не выбрано',
+//   types: [],
+//   season: 'Не выбрано',
+//   complexity: '0',
+//   priceMin: priceMin,
+//   priceMax: priceMax,
+// };
+
+// console.log(objFilter);
