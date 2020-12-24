@@ -1,5 +1,6 @@
 let myRouteArr = [];
 let locales = [];
+let myPoints = [];
 
 function setNumberToLoc() {
   let locNum = document.querySelectorAll('.preview__tour-number');
@@ -149,6 +150,7 @@ function init() {
           </li>
         `;
 
+        // ================ Добавление туров в мой маршрут ==========
         const elem = document.querySelectorAll('#preview-constructor li');
 
         if (previewListConstructor.children.length > 0) {
@@ -169,6 +171,10 @@ function init() {
 
         setNumberToLoc();
 
+        // ======================================================
+
+        // ======== При добавлении локации в маршрут идет запрос на координаты локации =========
+
         let coords = [];
         postData('constructor/loc_coords.php', { locId })
           .then((data) => {
@@ -176,19 +182,20 @@ function init() {
             console.log(data);
             coords.push(data.coords_x);
             coords.push(data.coords_y);
-            console.log(coords);
+            myPoints.push(coords);
+            console.log('coords: ', coords);
 
             let obj = {
               coords,
               name: data.name,
               image: `img/${data.image}`,
-              text: data.text,
+              text: data.preview_text,
             };
 
             points.push(obj);
-            console.log(points);
+            console.log('obj: ', obj);
 
-            // myCoordsCollection.add()
+            // // myCoordsCollection.add()
 
             points.forEach((point) => {
               myCoordsCollection.add(
@@ -221,22 +228,22 @@ function init() {
                 ),
               );
             });
-
             // Добавляем коллекцию меток на карту.
             myMap.geoObjects.add(myCoordsCollection);
 
-            return points;
+            return myPoints;
+            // ======================================================
           })
-          .then((points) => {
-            console.log(points);
+          .then((myPoints) => {
+            console.log('myPoints: ', myPoints);
 
             //================== Маршрутизация ==================
 
             // Создание экземпляра маршрута.
-            const multiRoute = new ymaps.multiRouter.MultiRoute(
+            const myRoute = new ymaps.multiRouter.MultiRoute(
               {
                 // Точки маршрута.
-                referencePoints: points,
+                referencePoints: myPoints,
               },
               {
                 // Убираем отображение путевой точки.
@@ -247,18 +254,32 @@ function init() {
                 routeActiveStrokeColor: '#2B4761',
                 // Внешний вид линий альтернативных маршрутов.
                 routeStrokeStyle: 'dot',
-                routeStrokeWidth: 0,
+                routeStrokeWidth: 2,
                 // Автоматически устанавливать границы карты так,
                 // чтобы маршрут был виден целиком.
-                boundsAutoApply: true,
+                boundsAutoApply: false,
               },
             );
 
             // Добавление маршрута на карту.
-            myMap.geoObjects.splice(1, 1, multiRoute);
-            // ymaps.ready(init);
-            // myMap.update();
+            myMap.geoObjects.splice(1, 1, myRoute);
+
             //===================================================
+
+            previewListConstructor.addEventListener('click', (e) => {
+              let remove = e.target.closest('#remove');
+
+              if (!remove) return;
+
+              remove.parentElement.parentElement.remove();
+
+              // myPoints.forEach((item, index, arr) => {
+              //   previewListConstructor.children[index].remove();
+              // });
+              // myMap.geoObjects.splice(1, 1, myRoute);
+
+              setNumberToLoc();
+            });
           });
       },
 
@@ -266,7 +287,9 @@ function init() {
         const locId = document.querySelector('.popover--constructor').dataset.loc_id;
         const obj = { locId };
 
-        postData('constructor/loc_description.php', obj).then((data) => showTourDescription(data));
+        postData('constructor/loc_description.php', obj).then((data) =>
+          showLocaleDescription(data),
+        );
       },
     },
   );
