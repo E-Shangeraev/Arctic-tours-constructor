@@ -135,8 +135,6 @@ function init() {
         const image = document.querySelector('.popover__img').src;
         const locId = document.querySelector('.popover--constructor').dataset.loc_id;
 
-        console.log(locId);
-
         const li = `
           <li class="preview__tour" style="background-image: url('${image}')" data-loc_id="${locId}">
             <h4 class="preview__tour-name">
@@ -150,28 +148,14 @@ function init() {
           </li>
         `;
 
-        // ================ Добавление туров в мой маршрут ==========
-        const elem = document.querySelectorAll('#preview-constructor li');
-
-        if (previewListConstructor.children.length > 0) {
-          let isSet = false;
-          elem.forEach((item) => {
-            if (item.dataset.loc_id === locId) {
-              isSet = true;
-              return;
-            }
-          });
-
-          if (!isSet) {
-            previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
-          }
-        } else {
-          previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
-        }
-
-        setNumberToLoc();
-
-        // ======================================================
+        // let activePlacemark;
+        // myPlacemark.events.add('click', function (e) {
+        //   if (activePlacemark) {
+        //     activePlacemark.options.set('iconImageHref', 'svg/pointer-blue.svg');
+        //   }
+        //   activePlacemark = e.get('target');
+        //   activePlacemark.options.set('iconImageHref', 'svg/pointer.svg');
+        // });
 
         // ======== При добавлении локации в маршрут идет запрос на координаты локации =========
 
@@ -179,11 +163,33 @@ function init() {
         postData('constructor/loc_coords.php', { locId })
           .then((data) => {
             data = data[0];
-            console.log(data);
             coords.push(data.coords_x);
             coords.push(data.coords_y);
-            myPoints.push(coords);
-            console.log('coords: ', coords);
+
+            // ================ Добавление туров в мой маршрут ==========
+            const elem = document.querySelectorAll('#preview-constructor li');
+
+            if (previewListConstructor.children.length > 0) {
+              let isSet = false;
+              elem.forEach((item) => {
+                if (item.dataset.loc_id === locId) {
+                  isSet = true;
+                  return;
+                }
+              });
+
+              if (!isSet) {
+                previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
+                myPoints.push(coords);
+              }
+            } else {
+              previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
+              myPoints.push(coords);
+            }
+
+            setNumberToLoc();
+
+            // ======================================================
 
             let obj = {
               coords,
@@ -193,43 +199,6 @@ function init() {
             };
 
             points.push(obj);
-            console.log('obj: ', obj);
-
-            // // myCoordsCollection.add()
-
-            points.forEach((point) => {
-              myCoordsCollection.add(
-                new ymaps.Placemark(
-                  point.coords,
-                  {
-                    object: point.name,
-                    name: point.name,
-                    balloonImage: point.image,
-                    balloonContent: point.text,
-                  },
-                  {
-                    hintLayout: HintLayout,
-                    balloonLayout: MyBalloonLayout,
-                    balloonContentLayout: MyBalloonContentLayout,
-                    iconContent: '2',
-                    // Опции.
-                    // Необходимо указать данный тип макета.
-                    iconLayout: 'default#imageWithContent',
-                    // Своё изображение иконки метки.
-                    iconImageHref: 'svg/pointer.svg',
-                    // Размеры метки.
-                    iconImageSize: [48, 48],
-                    // Смещение левого верхнего угла иконки относительно
-                    // её "ножки" (точки привязки).
-                    iconImageOffset: [-23, -42],
-                    // Смещение слоя с содержимым относительно слоя с картинкой.
-                    iconContentOffset: [19, 6],
-                  },
-                ),
-              );
-            });
-            // Добавляем коллекцию меток на карту.
-            myMap.geoObjects.add(myCoordsCollection);
 
             return myPoints;
             // ======================================================
@@ -265,21 +234,6 @@ function init() {
             myMap.geoObjects.splice(1, 1, myRoute);
 
             //===================================================
-
-            previewListConstructor.addEventListener('click', (e) => {
-              let remove = e.target.closest('#remove');
-
-              if (!remove) return;
-
-              remove.parentElement.parentElement.remove();
-
-              // myPoints.forEach((item, index, arr) => {
-              //   previewListConstructor.children[index].remove();
-              // });
-              // myMap.geoObjects.splice(1, 1, myRoute);
-
-              setNumberToLoc();
-            });
           });
       },
 
@@ -438,100 +392,63 @@ function init() {
 
   //===================================================
 
-  //========= Добавление локации в маршрут ============
+  // //========= Добавление локации в маршрут ============
 
-  const previewListConstructor = document.querySelector('#preview-constructor .preview__list');
-  const previewLocAdd = document.querySelector('#add');
-  const previewLocMore = document.querySelector('#more');
+  // const previewListConstructor = document.querySelector('#preview-constructor .preview__list');
+  // const previewLocAdd = document.querySelector('#add');
+  // const previewLocMore = document.querySelector('#more');
 
-  console.log(previewLocAdd);
+  // console.log(previewLocAdd);
 
-  //===================================================
+  // //===================================================
 
-  //================== Маршрутизация ==================
+  // ==================== Удаление локации ==================
 
-  // const createRoute = () => {
-  //   const MultiRoute = new ymaps.multiRouter.MultiRoute(
-  //     {
-  //       // Точки маршрута.
-  //       // Обязательное поле.
-  //       referencePoints: [
-  //         [69.341106, 88.174678],
-  //         [69.354106, 88.174678],
-  //         [69.398406, 88.154598],
-  //       ],
-  //     },
-  //     {
-  //       hintLayout: HintLayout,
-  //       balloonLayout: MyBalloonLayout,
-  //       balloonContentLayout: MyBalloonContentLayout,
-  //       iconContent: '2',
-  //       // Опции.
-  //       // Необходимо указать данный тип макета.
-  //       iconLayout: 'default#imageWithContent',
-  //       // Своё изображение иконки метки.
-  //       iconImageHref: 'svg/pointer.svg',
-  //       // Размеры метки.
-  //       iconImageSize: [48, 48],
-  //       // Смещение левого верхнего угла иконки относительно
-  //       // её "ножки" (точки привязки).
-  //       iconImageOffset: [0, 0],
-  //       // Смещение слоя с содержимым относительно слоя с картинкой.
-  //       iconContentOffset: [19, 6],
+  previewListConstructor.addEventListener('click', (e) => {
+    let remove = e.target.closest('#remove');
 
-  //       // Внешний вид путевых точек.
-  //       // Задаем собственную картинку для последней путевой точки.
-  //       wayPointIconLayout: 'default#image',
-  //       wayPointIconImageHref: 'svg/pointer.svg',
-  //       // Внешний вид линии активного маршрута.
-  //       routeActiveStrokeWidth: 3,
-  //       routeActiveStrokeStyle: 'solid',
-  //       routeActiveStrokeColor: '#2B4761',
-  //       // Внешний вид линий альтернативных маршрутов.
-  //       routeStrokeStyle: 'dot',
-  //       routeStrokeWidth: 3,
-  //       // Автоматически устанавливать границы карты так,
-  //       // чтобы маршрут был виден целиком.
-  //       boundsAutoApply: true,
-  //     },
-  //   );
+    if (!remove) return;
 
-  //   // Добавление маршрута на карту.
-  //   myMap.geoObjects.add(multiRoute);
-  // };
+    let number = remove.parentElement.parentElement.querySelector('.preview__tour-number')
+      .textContent;
+    number = number[0] - 1;
+    console.log(number);
 
-  // Создание экземпляра маршрута.
-  const multiRoute = new ymaps.multiRouter.MultiRoute(
-    {
-      // Точки маршрута.
-      // Обязательное поле.
-      referencePoints: [
-        [69.341106, 88.174678],
-        [69.354106, 88.174678],
-        [69.398406, 88.154598],
-      ],
-    },
-    {
-      // Внешний вид путевых точек.
-      // Убираем отображение путевой точки.
-      wayPointIconLayout: '',
-      // Внешний вид линии активного маршрута.
-      routeActiveStrokeWidth: 3,
-      routeActiveStrokeStyle: 'solid',
-      routeActiveStrokeColor: '#2B4761',
-      // Внешний вид линий альтернативных маршрутов.
-      routeStrokeStyle: 'dot',
-      routeStrokeWidth: 3,
-      // Автоматически устанавливать границы карты так,
-      // чтобы маршрут был виден целиком.
-      boundsAutoApply: true,
-    },
-  );
+    myPoints.splice(number, 1);
 
-  // Добавление маршрута на карту.
-  myMap.geoObjects.add(multiRoute);
+    // Создание экземпляра маршрута.
+    const myRoute = new ymaps.multiRouter.MultiRoute(
+      {
+        // Точки маршрута.
+        referencePoints: myPoints,
+      },
+      {
+        // Убираем отображение путевой точки.
+        wayPointIconLayout: '',
+        // Внешний вид линии активного маршрута.
+        routeActiveStrokeWidth: 3,
+        routeActiveStrokeStyle: 'solid',
+        routeActiveStrokeColor: '#2B4761',
+        // Внешний вид линий альтернативных маршрутов.
+        routeStrokeStyle: 'dot',
+        routeStrokeWidth: 2,
+        // Автоматически устанавливать границы карты так,
+        // чтобы маршрут был виден целиком.
+        boundsAutoApply: false,
+      },
+    );
 
-  //===================================================
+    // Обновление маршрута при удалении локации.
+    myMap.geoObjects.splice(1, 1, myRoute);
+
+    remove.parentElement.parentElement.remove();
+
+    setNumberToLoc();
+
+    console.log('myPoints: ', myPoints);
+    return;
+  });
+  // ======================================================
 }
 
 // ============== Поиск по своим объектам ==============
