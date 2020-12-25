@@ -1,6 +1,7 @@
 @import '../variables.scss';
 
-.btn-reservation {
+.btn-reservation,
+.btn-calc {
   padding: 10px 15px;
 
   font-family: $grotesk;
@@ -25,4 +26,12 @@
     outline: none;
     box-shadow: 0 0 2px 2px rgb(238, 71, 99);
   }
+}
+
+.btn-calc {
+  // position: relative;
+  // left: 10px;
+  // right: 10px;
+  margin-left: 22%;
+  margin-bottom: 15px;
 }

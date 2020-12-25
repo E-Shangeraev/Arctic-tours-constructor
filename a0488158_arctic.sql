@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 22 2020 г., 13:44
+-- Время создания: Дек 25 2020 г., 11:05
 -- Версия сервера: 5.6.47
 -- Версия PHP: 7.1.33
 
@@ -20,6 +20,71 @@ SET time_zone = "+00:00";
 --
 -- База данных: `a0488158_arctic`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `locales`
+--
+
+CREATE TABLE `locales` (
+  `id` int(11) NOT NULL,
+  `loc_id` int(11) NOT NULL,
+  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` int(11) NOT NULL DEFAULT '0',
+  `complexity` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `summer` tinyint(1) NOT NULL,
+  `autumn` tinyint(1) NOT NULL,
+  `winter` tinyint(1) NOT NULL,
+  `spring` tinyint(1) NOT NULL,
+  `helicopter` tinyint(1) NOT NULL,
+  `cruise` tinyint(1) NOT NULL,
+  `hiking` tinyint(1) NOT NULL,
+  `other` tinyint(1) NOT NULL,
+  `territory` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `preview_text` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coords_x` float NOT NULL,
+  `coords_y` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `locales`
+--
+
+INSERT INTO `locales` (`id`, `loc_id`, `name`, `image`, `price`, `complexity`, `summer`, `autumn`, `winter`, `spring`, `helicopter`, `cruise`, `hiking`, `other`, `territory`, `preview_text`, `coords_x`, `coords_y`) VALUES
+(1, 1, 'Озеро Хантайское', 'tours/1.jpg', 10000, '1', 0, 0, 1, 1, 0, 0, 1, 0, 'Озеро Хантайское', 'Ночевка и трофейная рыбалка на одном из красивейших озер Зауралья', 69.3411, 88.1747),
+(2, 2, 'Плато Путорана', 'tours/2.jpg', 5000, '2', 1, 1, 1, 1, 1, 0, 1, 0, 'Плато Путорана', 'Lorem ipsum dolor sit amet consectetur adipisicing elit.', 69.3984, 88.1546),
+(3, 3, 'Город Дудинка', 'tours/3.jpg', 8500, '1', 0, 0, 0, 1, 0, 0, 0, 1, 'Город Дудинка', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?', 69.3541, 88.1747),
+(4, 4, 'Озеро Лама', 'tours/1.jpg', 12300, '2', 1, 0, 1, 0, 0, 1, 0, 0, 'Озеро Лама', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?', 69.3841, 88.1713),
+(5, 5, 'Пос. Снежногорск', 'tours/2.jpg', 0, '1', 1, 1, 1, 1, 0, 0, 1, 0, 'Пос. Снежногорск', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?', 69.3957, 88.1722),
+(6, 6, 'Красные Камни', 'tours/3.jpg', 19000, '3', 1, 0, 0, 0, 1, 0, 1, 0, 'Красные Камни', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis quidem ipsam quisquam?', 69.3957, 89.1718);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `locales_description`
+--
+
+CREATE TABLE `locales_description` (
+  `id` int(11) NOT NULL,
+  `loc_id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `intro` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `facts` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `territory` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transport` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lodging` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `locales_description`
+--
+
+INSERT INTO `locales_description` (`id`, `loc_id`, `title`, `intro`, `image`, `description`, `facts`, `territory`, `transport`, `lodging`) VALUES
+(1, 1, 'Поселок озеро Хантайское. Национальный колорит в Таймырской глуши', 'Небольшой национальный посёлок Хантайское озеро лежит чуть западнее устья реки Хаканча. А с запада посёлок ограничивает глубоко вдающийся в берег залив. Таким образом, посёлок расположен на полуострове. Здесь живут, в основном, долгане и эвенки. Жителей около полутысячи.', 'img/locales/locale-1/1.jpg', 'ИСТОРИЯ ПОСЕЛКА\r\nИзначально посёлок формировался как стойбище коренного населения без постоянных построек. Основу нынешнего населённого пункта построили в 1952—1959 гг. ссыльные из немецких поселений на Волге, из Польши и Прибалтики. Таким образом, архитектура посёлка формировалась различными этапами его развития. Ближе к берегу стоят здание старой школы и два ряда деревянных домов, построенных депортированными. Третий ряд домов был построен в конце 1960-х годов в период преобразования колхоза и совхоза: новая школа, здания администрации ГОУСП «Хантайский» и посёлка, четырёхквартирные дома. В 1970-е годы после принудительного переселения в 1969 году 48 долганских и говорящих по-якутски эвенкийских семей, была построена следующая группа домов в стороне от озера. В 1976 г. Указом Президиума ВС РСФСР поселок Таймыр переименован в Хантайское Озеро.\r\n\r\nЭКОНОМИКА И ИНФРАСТРУКТУРА\r\nПосёлок расположен на полуострове в юго-западной части Хантайского озера. На берегу имеется небольшой порт (пирс). В посёлке работают школа-интернат, детский сад, участковая больница, магазин, пекарня, отделение «Федеральной почтовой связи», отделение ОАО «Электросвязь», сельский Дом культуры, библиотека, ДЭС, ГОУСП «Хантайское», семейно-родовые хозяйства, община МНС «Буркан». Большинство жителей посёлка Хантайское Озеро заняты в традиционных отраслях хозяйствования коренных народов Севера.\r\n\r\nПоселок интересен в плане изучения традиций коренных народов Таймыра, из-за удаленности от цивилизации почти не изменившихся с древних времен. Туристы смогут стать участниками нескольких уникальных местных промыслов и обрядов:', 'Эвенки отмечают Новый год в середине лета. А еще они задабривают дух огня, вместо того чтобы положить подарки под ёлочку. Во время шаманского ритуала Кормления огня в поселке озеро Хантайское у вас будет шанс в этом убедиться!;\r\nТрофейная рыбалка. Реки в окрестностях поселка озеро Хантайское очень богатым животным миром. В них представлен практически весь видовой состав рыб. Это и таймень, и ленок, и хариус, и сиг, и др. Вы сможете поймать тайменя весом до 20 кг\r\n', 'Поселок озеро Хантайское', 'Вертолет; Судно на воздушной подушке', 'Палатка; Ночлег у местных жителей');
 
 -- --------------------------------------------------------
 
@@ -117,6 +182,12 @@ INSERT INTO `routes_description` (`id`, `tour_id`, `title`, `intro`, `image_1`, 
 --
 
 --
+-- Индексы таблицы `locales`
+--
+ALTER TABLE `locales`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `points`
 --
 ALTER TABLE `points`
@@ -137,6 +208,12 @@ ALTER TABLE `routes_description`
 --
 -- AUTO_INCREMENT для сохранённых таблиц
 --
+
+--
+-- AUTO_INCREMENT для таблицы `locales`
+--
+ALTER TABLE `locales`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `points`

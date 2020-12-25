@@ -1,6 +1,8 @@
+const previewConstructor = document.querySelector('#preview-constructor');
 let myRouteArr = [];
 let locales = [];
 let myPoints = [];
+let priceArr = [];
 
 function setNumberToLoc() {
   let locNum = document.querySelectorAll('.preview__tour-number');
@@ -165,9 +167,13 @@ function init() {
             data = data[0];
             coords.push(data.coords_x);
             coords.push(data.coords_y);
+            console.log(data);
 
             // ================ Добавление туров в мой маршрут ==========
             const elem = document.querySelectorAll('#preview-constructor li');
+            const calcButton = `
+              <button class='btn-calc'>Рассчитать тур</button>
+            `;
 
             if (previewListConstructor.children.length > 0) {
               let isSet = false;
@@ -181,13 +187,30 @@ function init() {
               if (!isSet) {
                 previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
                 myPoints.push(coords);
+                priceArr.push(data.price);
               }
             } else {
               previewListConstructor.insertAdjacentHTML('beforeend', li.trim());
+              previewConstructor.insertAdjacentHTML('beforeend', calcButton);
               myPoints.push(coords);
+              priceArr.push(data.price);
             }
 
             setNumberToLoc();
+
+            const calcPrice = document.querySelector('#preview-constructor .btn-calc');
+            let totalPrice = 0;
+
+            calcPrice.addEventListener('click', () => {
+              const reducer = (a, b) => parseInt(a) + parseInt(b);
+              totalPrice = priceArr.reduce(reducer);
+              console.log(totalPrice);
+
+              if (document.querySelector('.locale')) {
+                filter.removeChild(document.querySelector('.locale'));
+              }
+              showTourConstructor(data);
+            });
 
             // ======================================================
 
@@ -205,6 +228,7 @@ function init() {
           })
           .then((myPoints) => {
             console.log('myPoints: ', myPoints);
+            console.log('priceArr: ', priceArr);
 
             //================== Маршрутизация ==================
 
@@ -392,16 +416,6 @@ function init() {
 
   //===================================================
 
-  // //========= Добавление локации в маршрут ============
-
-  // const previewListConstructor = document.querySelector('#preview-constructor .preview__list');
-  // const previewLocAdd = document.querySelector('#add');
-  // const previewLocMore = document.querySelector('#more');
-
-  // console.log(previewLocAdd);
-
-  // //===================================================
-
   // ==================== Удаление локации ==================
 
   previewListConstructor.addEventListener('click', (e) => {
@@ -415,7 +429,6 @@ function init() {
     console.log(number);
 
     myPoints.splice(number, 1);
-
     // Создание экземпляра маршрута.
     const myRoute = new ymaps.multiRouter.MultiRoute(
       {
@@ -445,9 +458,69 @@ function init() {
 
     setNumberToLoc();
 
-    console.log('myPoints: ', myPoints);
+    // ========= Удаление кнопки Рассчитать тур ===========
+    const calcPrice = document.querySelector('#preview-constructor .btn-calc');
+
+    if (myPoints.length < 1) {
+      calcPrice.remove();
+    }
+
+    // ====================================================
     return;
   });
+  // ======================================================
+
+  // ========== Изменение цвета маркера при клике ===========
+
+  // objectManager = new ymaps.ObjectManager({
+  //   // Чтобы метки начали кластеризоваться, выставляем опцию.
+  //   clusterize: true,
+  //   geoObjectOpenBalloonOnClick: false,
+  //   clusterOpenBalloonOnClick: false,
+  // });
+
+  // myMap.geoObjects.add(objectManager);
+
+  // postData('constructor/locales.php', {}).then((data) => {
+  //   console.log(data);
+  //   objectManager.add(data);
+  // });
+
+  // // // Необходимо указать данный тип макета.
+  // // iconLayout: 'default#imageWithContent',
+  // // // Своё изображение иконки метки.
+  // // iconImageHref: 'svg/pointer-blue.svg',
+
+  // function onObjectEvent(e) {
+  //   var objectId = e.get('objectId');
+  //   if (e.get('type') == 'mouseenter') {
+  //     // Метод setObjectOptions позволяет задавать опции объекта "на лету".
+  //     objectManager.objects.setObjectOptions(objectId, {
+  //       iconImageHref: 'svg/pointer.svg',
+  //     });
+  //   } else {
+  //     objectManager.objects.setObjectOptions(objectId, {
+  //       iconImageHref: 'svg/pointer-blue.svg',
+  //     });
+  //   }
+  // }
+
+  // function onClusterEvent(e) {
+  //   var objectId = e.get('objectId');
+  //   if (e.get('type') == 'mouseenter') {
+  //     objectManager.clusters.setClusterOptions(objectId, {
+  //       iconImageHref: 'svg/pointer.svg',
+  //     });
+  //   } else {
+  //     objectManager.clusters.setClusterOptions(objectId, {
+  //       iconImageHref: 'svg/pointer-blue.svg',
+  //     });
+  //   }
+  // }
+
+  // objectManager.objects.events.add(['mouseenter', 'mouseleave'], onObjectEvent);
+  // objectManager.clusters.events.add(['mouseenter', 'mouseleave'], onClusterEvent);
+
   // ======================================================
 }
 

@@ -509,5 +509,12 @@ readyTab.addEventListener('click', () => {
   container.children[0].remove();
   container.insertAdjacentHTML('afterbegin', filterReady);
 
+  if (document.querySelector('.locale')) {
+    document.querySelector('.locale').remove();
+  }
+  if (document.querySelector('.tour-constructor')) {
+    filter.removeChild(document.querySelector('.tour-constructor'));
+  }
+
   setFilter('filters/filter.php', updatePreviewList);
 });
