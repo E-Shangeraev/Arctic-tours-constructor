@@ -209,7 +209,7 @@ function init() {
               if (document.querySelector('.locale')) {
                 filter.removeChild(document.querySelector('.locale'));
               }
-              showTourConstructor(data);
+              // showTourConstructor(data);
             });
 
             // ======================================================

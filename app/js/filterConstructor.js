@@ -164,6 +164,8 @@ function showTourConstructor(data) {
     filter.removeChild(document.querySelector('.locale'));
   }
 
+  console.log(data);
+
   // let facts = data.facts.split(';');
   // facts = facts.map((item) => {
   //   return `
@@ -173,13 +175,68 @@ function showTourConstructor(data) {
   //   </li>`;
   // });
   // facts = facts.toString().replace(/,/g, '');
+  let title = data.map((item) => item.territory);
+  title = title.join(' - ');
+  console.log(title);
+
+  let image = data.map((item) => {
+    return `
+    <div class="tour__slide" style="background-image: url('${item.image}')">
+      <span class="slide__name">${item.territory}</span>
+    </div>
+    `;
+  });
+  image = image.toString().replace(/,/g, '');
+
+  let facts = data.map((item, index) => {
+    let localeFacts = item.facts.split(';');
+    return `
+    <li>
+      <div class="locale__fact">
+        <img src='svg/locale-facts/fishing_rod.svg' alt="" />
+        <p class="filter__item">
+          ${localeFacts}. Здесь вы пробудете 
+          <span class="filter__item filter__item--red day-count-${index}">1 день</span>.
+        </p>
+      </div>
+      <div class="filter__group-size">
+        <span class="filter__item">Длительность вашего пребывания здесь:</span>
+        <input
+          type="text"
+          class="range-day-count-${index}"
+          name="range-day-count"
+          data-min="1"
+          data-max="30"
+          data-from="1"
+          data-grid="false"
+        />
+      </div><br><br>
+    </li>
+  `;
+  });
+  facts = facts.toString().replace(/,/g, '');
+
+  let program = data.map((item, index) => {
+    return `
+      <li class="program__item">
+        <h4 class="program__day">
+          <span>> Локация ${index + 1}: </span>
+          <span>${item.territory}</span>
+        </h4>
+        <p class="program__descr">${item.intro}</p>
+      </li>
+    `;
+  });
+  program = program.toString().replace(',', '');
 
   const tourConstructor = `
   <section class="row tour-constructor">
     <aside class="col-sm-3 filter__settings filter__settings--tour">
       <div class="tour__settings">
       <h3 class="filter__item" style="margin-bottom: 10px">Конструируемый тур</h3>
-      <h3 class="filter__title" style="margin-bottom: 20px">Норильск - оз. Собачье</h3>
+      <h3 class="filter__title" style="margin-bottom: 20px">
+        ${data[0].territory} - ${data[data.length - 1].territory}
+      </h3>
 
         <span class="filter__item">Общая сложность: средняя</span>
 
@@ -217,7 +274,7 @@ function showTourConstructor(data) {
 
     <article class="col-sm-9 d-flex flex-column filter__description tour__article">
       <header class="locale__header">
-        <h2 class="locale__name">Город Норильск - поселок Снежногорск - озеро Лама - озеро Собачье. Конструируемый тур</h2>
+        <h2 class="locale__name">${title}</h2>
       </header>
       
       <div class="tour__promo">
@@ -227,78 +284,17 @@ function showTourConstructor(data) {
             Этот тур составили вы сами, используя конструктор туров. Конструктор учитывает все возможные условия сочетаемости точек вашего маршрута, поэтому если вы видите эту страницу, то с вашим туром все в порядке и он состоится. Однако, описание тура также составлено автоматически и может содержать не все подробности о нем. Более детально обсудить тур вы сможете с туроператором, который возьмется за его выполнение.
           </p>
         </div><br>
-        <img class="tour__img" src="img/locales/locale-1/1.jpg" alt="Фотография с локации" />
+        
+        <div class="tour__slider">${image}</div>
       </div>
       
-      <p class="locale__descr">Во время этого тура вы посетите несколько локаций тристско-рекреационного кластера «Арктический». Вот главные точки интереса, которые привлекут ваше внимание в ходе тура:</p>
+      <p class="locale__descr">Во время этого тура вы посетите несколько локаций туристско-рекреационного кластера «Арктический». Вот главные точки интереса, которые привлекут ваше внимание в ходе тура:</p>
 
-      <ul class="locale__facts">
-        <li>
-          <div class="locale__fact">
-            <img src='svg/locale-facts/fishing_rod.svg' alt="" />
-            <p class="filter__item">
-              Музеи Норильска – популярные достопримечательности, которые входят в обязательную программу посещения Норильска. На ознакомление со всеми экспонатами не хватит и нескольких месяцев, но обзорную экскурсию должен наметить для себя каждый турист. Здесь вы пробудете 
-              <span class="filter__item filter__item--red day-count-1">1 день</span>.
-            </p>
-          </div>
-          <div class="filter__group-size">
-            <span class="filter__item">Длительность вашего пребывания здесь:</span>
-            <input
-              type="text"
-              class="range-day-count-1"
-              name="range-day-count"
-              data-min="1"
-              data-max="30"
-              data-from="1"
-              data-grid="false"
-            />
-          </div><br><br>
-        </li>
-        <li>
-          <div class="locale__fact">
-            <img src='svg/locale-facts/tambourine.svg' alt="" />
-            <p class="filter__item">
-              Эвенки отмечают Новый год в середине лета. А езе они задабривают дух огня, вместо того чтобы положить подарки под ёлочку. Во время шаманского ритуала Кормления огня в поселке Снежногорск у вас будет шанс в этом убедиться! Здесь вы пробудете 
-              <span class="filter__item filter__item--red day-count-2">1 день</span>.
-            </p>
-          </div>
-          <div class="filter__group-size">
-            <span class="filter__item">Длительность вашего пребывания здесь:</span>
-            <input
-              type="text"
-              class="range-day-count-2"
-              name="range-day-count"
-              data-min="1"
-              data-max="30"
-              data-from="1"
-              data-grid="false"
-            />
-          </div><br><br>
-        </li>
-      </ul>
+      <ul class="locale__facts">${facts}</ul>
       
 
       <h3 class="tour__program">Программа тура</h3>
-      <ul class="program">
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> Локация 1: </span>
-            <span>город Норильск</span>
-          </h4>
-          <p class="program__descr">
-            Нори́льск — город краевого подчинения Красноярского края. Расположен на севере региона к югу от Таймырского полуострова, примерно в 90 км к востоку от Енисея и в 1500 км севернее Красноярска, в 300 км к северу от Северного полярного круга, и в 2400 км от Северного полюса. В Норильске вы можете посетить многочисленные музеи и выставки этнической культуры народов крайнего севера. Здесь вы пробудете <span>2 дня</span>
-          </p>
-        </li>
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> Локация 2: </span>
-            <span>поселок Снежногорск</span>
-          </h4>
-          <p class="program__descr">
-            Снежного́рск — посёлок городского типа в Красноярском крае России, на реке Хантайке (Усть-Хантайском водохранилище), правом притоке Енисея. Расположен в 160 км к югу от Норильска. Снежногорск входит в городской округ город Норильск как его отдалённый эксклав. Со всех сторон окружён Таймырским Долгано-Ненецким районом. 
-            Население — 666 чел. Здесь вы пробудете <span>1 день</span>
-          </p>
-        </li>
+      <ul class="program">${program}</ul>
     </article>
 
     <footer class="locale__footer col-sm-12">
@@ -316,9 +312,20 @@ function showTourConstructor(data) {
 
   filter.insertAdjacentHTML('beforeend', tourConstructor);
 
-  const groupTo = document.querySelector('.tour-constructor .group-to');
-  const dayCount = document.querySelector('.day-count-1');
+  $(function () {
+    $('.tour__slider').slick({
+      arrows: true,
+      // appendArrows: $('.slider__arrows'),
+      autoplay: false,
+      autoplaySpeed: 8000,
+      speed: 1400,
+      cssEase: 'ease-in-out',
+      pauseOnHover: false,
+      waitForAnimate: true,
+    });
+  });
 
+  const groupTo = document.querySelector('.tour-constructor .group-to');
   $('.range-group-size').ionRangeSlider({
     type: 'single',
     skin: 'round',
@@ -331,28 +338,74 @@ function showTourConstructor(data) {
     },
   });
 
-  $('.range-day-count-1').ionRangeSlider({
-    type: 'single',
-    skin: 'round',
-    min: 1,
-    max: 20,
-    from: 1,
-    step: 1,
-    onChange: function (data) {
-      const num = String(data.from);
+  function setRangeDayCount(index) {
+    const dayCount = document.querySelector(`.day-count-${index}`);
 
-      if (num.match(/1$/)) {
-        dayCount.textContent = num + ' день';
-      }
-      if (num.match(/[2-4]$/)) {
-        dayCount.textContent = num + ' дня';
-      }
-      if (num.match(/[0, 5-9]$/)) {
-        dayCount.textContent = num + ' дней';
-      }
-      if (num >= 11 && num <= 19) {
-        dayCount.textContent = num + ' дней';
-      }
-    },
-  });
+    $(`.range-day-count-${index}`).ionRangeSlider({
+      type: 'single',
+      skin: 'round',
+      min: 1,
+      max: 20,
+      from: 1,
+      step: 1,
+      onChange: function (data) {
+        const num = String(data.from);
+
+        if (num.match(/1$/)) {
+          dayCount.textContent = num + ' день';
+        }
+        if (num.match(/[2-4]$/)) {
+          dayCount.textContent = num + ' дня';
+        }
+        if (num.match(/[0, 5-9]$/)) {
+          dayCount.textContent = num + ' дней';
+        }
+        if (num >= 11 && num <= 19) {
+          dayCount.textContent = num + ' дней';
+        }
+      },
+    });
+  }
+
+  data.forEach((item, index) => setRangeDayCount(index));
 }
+
+console.log(previewConstructor);
+
+previewConstructor.addEventListener('click', (e) => {
+  const calcPrice = e.target.closest('#preview-constructor .btn-calc');
+  const previewTour = document.querySelectorAll('#preview-constructor .preview__tour');
+
+  if (e.target != calcPrice) return;
+
+  const obj = {
+    locId: [],
+  };
+
+  previewTour.forEach((item) => {
+    obj.locId.push(item.dataset.loc_id);
+  });
+  console.log(obj);
+
+  postData('constructor/constructor.php', obj).then((data) => {
+    showTourConstructor(data);
+  });
+});
+
+// Сворачаивание/разворачивание превью списка туров
+
+preview.addEventListener('click', (e) => {
+  if (!e.target.closest('.preview__arrow')) return;
+
+  e.target.classList.toggle('preview__arrow--close');
+  previewList.classList.toggle('preview__list--close');
+});
+
+// Сворачаивание/разворачивание превью списка туров
+
+previewConstructor.addEventListener('click', (e) => {
+  if (!e.target.closest('.preview__arrow')) return;
+
+  e.target.classList.toggle('preview__arrow--close');
+  previewListConstructor.classList.toggle('preview__list--close');
+});

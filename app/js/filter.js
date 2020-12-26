@@ -8,7 +8,7 @@ const filterSettings = document.querySelector('.filter__settings');
 const previewList = document.querySelector('.preview__list');
 const preview = document.querySelector('.preview');
 const previewTourShow = document.querySelector('.preview__tour-show');
-const previewArrow = document.querySelectorAll('.preview__arrow');
+// const previewArrow = document.querySelectorAll('.preview__arrow');
 
 const readyTab = document.querySelector('#pills-ready-tab');
 const constructorTab = document.querySelector('#pills-constructor-tab');
@@ -473,6 +473,13 @@ function showTourDescription(data) {
       groupTo.textContent = data.to;
     },
   });
+
+  $('.btn-reservation').magnificPopup({
+    items: {
+      src: '#reservation-popup',
+      type: 'inline',
+    },
+  });
 }
 
 // Клик по кнопке Подробно в превью списке туров
@@ -485,17 +492,6 @@ previewList.addEventListener('click', (e) => {
   postData('filters/tours_description.php', objShow).then((data) => {
     console.log(data.actions);
     showTourDescription(data);
-  });
-});
-
-// Сворачаивание/разворачивание превью списка туров
-
-preview.addEventListener('click', (e) => {
-  if (e.target != previewArrow) return;
-
-  previewArrow.forEach((arrow) => {
-    arrow.classList.toggle('preview__arrow--close');
-    previewList.classList.toggle('preview__list--close');
   });
 });
 

@@ -14,6 +14,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"
     />
+    <link rel="stylesheet" type="text/css" href="slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css" />
+    <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/style.min.css" />
     <script
       src="https://api-maps.yandex.ru/2.1/?apikey=8596f46f-4416-4fbb-87ee-ef65ee25576e&lang=ru_RU"
@@ -111,6 +114,19 @@
       </section>
     </main>
 
+    <div id="reservation-popup" class="reservation-popup mfp-hide">
+      <header class="reservation-popup__header">
+        <h3>Бронирование тура</h3>
+      </header>
+      <div class="reservation-popup__wrapper">
+        <form class="reservation-popup__form" method="POST" action="config/mail.php">
+          <input class="reservation-popup__input" type="name" name="name" required placeholder="Введите имя">
+          <input class="reservation-popup__input" type="phone" name="tel" required placeholder="Введите номер телефона">
+          <input type="submit" class="reservation-popup__button btn-reservation" id="reserve" value="Забронировать">
+        </form>
+      </div>
+    </div>
+
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
@@ -135,12 +151,14 @@
       src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+    <script type="text/javascript" src="slick/slick.min.js"></script>
     
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/mail.js"></script>
     <script src="js/aside.js"></script>
     <script src="js/filter.js"></script>
     <script src="js/yandexMap.js"></script>
     <script src="js/yandexMapConstructor.js"></script>
     <script src="js/filterConstructor.js"></script>
-   
   </body>
 </html>
