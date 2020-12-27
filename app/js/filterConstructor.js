@@ -300,6 +300,8 @@ function showTourConstructor(data) {
 
   filter.insertAdjacentHTML('beforeend', tourConstructor);
 
+  objFilter.territory = title;
+
   $(function () {
     $('.tour__slider').slick({
       arrows: true,
@@ -314,7 +316,8 @@ function showTourConstructor(data) {
 
   function setRangeDayCount(index) {
     const dayCount = document.querySelector(`.day-count-${index}`);
-
+    // let days = objFilter.territory.split('-');
+    // days = days.splice(index, 0, dayCount.textContent);
     $(`.range-day-count-${index}`).ionRangeSlider({
       type: 'single',
       skin: 'round',
@@ -370,8 +373,6 @@ function showTourConstructor(data) {
       totalPriceText.textContent = total;
     },
   });
-
-  objFilter.territory = title;
 
   $('.tour-constructor .btn-reservation').magnificPopup({
     items: {
