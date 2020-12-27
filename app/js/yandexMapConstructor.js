@@ -14,7 +14,7 @@ function setNumberToLoc() {
 
 function init() {
   // Создание карты.
-  const myMap = new ymaps.Map('map-constructor', {
+  const myMap = new ymaps.Map('ymap-constructor', {
     // Координаты центра карты.
     // Порядок по умолчанию: «широта, долгота».
     // Чтобы не определять координаты центра карты вручную,

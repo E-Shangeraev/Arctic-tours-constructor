@@ -316,8 +316,7 @@ function showTourConstructor(data) {
 
   function setRangeDayCount(index) {
     const dayCount = document.querySelector(`.day-count-${index}`);
-    // let days = objFilter.territory.split('-');
-    // days = days.splice(index, 0, dayCount.textContent);
+
     $(`.range-day-count-${index}`).ionRangeSlider({
       type: 'single',
       skin: 'round',
@@ -379,6 +378,23 @@ function showTourConstructor(data) {
       src: '#reservation-popup',
       type: 'inline',
     },
+  });
+
+  const btnReserv = document.querySelector('.tour-constructor .btn-reservation');
+  btnReserv.addEventListener('click', () => {
+    const locDays = document.querySelectorAll('.locale__fact span');
+    let days = objFilter.territory.split('-');
+
+    locDays.forEach((day, index) => {
+      days.splice(index + (index + 1), 0, ` (${day.textContent});`);
+    });
+
+    days = days
+      .join('')
+      .split(';')
+      .filter((item) => item);
+
+    objFilter.territory = days.join(' - ');
   });
 }
 

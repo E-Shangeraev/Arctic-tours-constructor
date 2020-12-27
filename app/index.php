@@ -71,7 +71,7 @@
                 role="tabpanel"
                 aria-labelledby="pills-ready-tab"
               >
-                <div class="map" id="map" style="width: 100%; height: 100%"></div>
+                <div class="map" id="ymap" style="width: 100%; height: 100%"></div>
 
                 <div class="preview" id="preview-ready">
                   <header class="preview__header">
@@ -89,7 +89,7 @@
                 role="tabpanel"
                 aria-labelledby="pills-constructor-tab"
               >
-                <div class="map" id="map-constructor" style="width: 100%; height: 100%"></div>
+                <div class="map" id="ymap-constructor" style="width: 100%; height: 100%"></div>
 
                 <div class="preview" id="preview-constructor">
                   <header class="preview__header">
