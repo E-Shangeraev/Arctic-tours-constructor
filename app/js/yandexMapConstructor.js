@@ -3,6 +3,7 @@ let myRouteArr = [];
 let locales = [];
 let myPoints = [];
 let priceArr = [];
+let totalPriceConstructor = 0;
 
 function setNumberToLoc() {
   let locNum = document.querySelectorAll('.preview__tour-number');
@@ -199,12 +200,11 @@ function init() {
             setNumberToLoc();
 
             const calcPrice = document.querySelector('#preview-constructor .btn-calc');
-            let totalPrice = 0;
 
             calcPrice.addEventListener('click', () => {
               const reducer = (a, b) => parseInt(a) + parseInt(b);
-              totalPrice = priceArr.reduce(reducer);
-              console.log(totalPrice);
+              totalPriceConstructor = priceArr.reduce(reducer);
+              console.log(totalPriceConstructor);
 
               if (document.querySelector('.locale')) {
                 filter.removeChild(document.querySelector('.locale'));

@@ -1,20 +1,5 @@
 const previewListConstructor = document.querySelector('#preview-constructor .preview__list');
 
-// previewListConstructor.addEventListener('click', (e) => {
-//   let remove = e.target.closest('#remove');
-
-//   if (!remove) return;
-
-//   myRouteArr.forEach((item, index, arr) => {
-//     if (item === locale) {
-//       arr.splice(index, 1);
-//     }
-//   });
-//   remove.parentElement.parentElement.remove();
-
-//   setNumberToLoc();
-// });
-
 previewListConstructor.addEventListener('click', (e) => {
   let more = e.target.closest('#more');
 
@@ -242,15 +227,18 @@ function showTourConstructor(data) {
 
         <p class="filter__group-size">
           <span class="filter__item">Размер группы от </span>
-          <span class="filter__item filter__item--red group-to">10</span>
-          <span class="filter__item"> человек(а)</span>
+          <span class="filter__item filter__item--red group-from">1</span>
+          <span class="filter__item"> до </span>
+          <span class="filter__item filter__item--red group-to">1</span>
+          <span class="filter__item"> человек</span>
           <input
             type="text"
             class="range-group-size"
             name="range-group-size"
-            data-min="2"
-            data-max="20"
-            data-from="10"
+            data-min="1"
+            data-max="10"
+            data-from="1"
+            data-to="1"
             data-grid="false"
           />
         </p>
@@ -262,7 +250,7 @@ function showTourConstructor(data) {
 
         <div class="filter__total-price">
           <h3 class="filter__title" style="text-transform: uppercase">Ориентировочная стоимость:</h3>
-          <span class="filter__item filter__item--red">115 900</span>
+          <span class="filter__item filter__item--red total-price">115 900</span>
           <span class="filter__item"> рублей с человека</span>
         </div>
 
@@ -315,7 +303,6 @@ function showTourConstructor(data) {
   $(function () {
     $('.tour__slider').slick({
       arrows: true,
-      // appendArrows: $('.slider__arrows'),
       autoplay: false,
       autoplaySpeed: 8000,
       speed: 1400,
@@ -325,19 +312,6 @@ function showTourConstructor(data) {
     });
   });
 
-  const groupTo = document.querySelector('.tour-constructor .group-to');
-  $('.range-group-size').ionRangeSlider({
-    type: 'single',
-    skin: 'round',
-    min: 1,
-    max: 20,
-    from: 10,
-    step: 1,
-    onChange: function (data) {
-      groupTo.textContent = data.from;
-    },
-  });
-
   function setRangeDayCount(index) {
     const dayCount = document.querySelector(`.day-count-${index}`);
 
@@ -345,7 +319,7 @@ function showTourConstructor(data) {
       type: 'single',
       skin: 'round',
       min: 1,
-      max: 20,
+      max: 30,
       from: 1,
       step: 1,
       onChange: function (data) {
@@ -368,6 +342,43 @@ function showTourConstructor(data) {
   }
 
   data.forEach((item, index) => setRangeDayCount(index));
+
+  const totalPriceText = document.querySelector('.tour-constructor .total-price');
+  const groupFrom = document.querySelector('.group-from');
+  const groupTo = document.querySelector('.group-to');
+
+  totalPriceText.textContent = totalPriceConstructor;
+
+  $('.range-group-size').ionRangeSlider({
+    type: 'double',
+    skin: 'round',
+    min: 1,
+    max: 10,
+    from: 1,
+    to: 10,
+    step: 1,
+    onChange: function (data) {
+      groupFrom.textContent = data.from;
+      groupTo.textContent = data.to;
+      objFilter.groupFrom = data.from;
+      objFilter.groupTo = data.to;
+
+      console.log(totalPriceConstructor);
+
+      const total = calcTotalPrice(objFilter.groupFrom, objFilter.groupTo, totalPriceConstructor);
+      objFilter.price = total;
+      totalPriceText.textContent = total;
+    },
+  });
+
+  objFilter.territory = title;
+
+  $('.tour-constructor .btn-reservation').magnificPopup({
+    items: {
+      src: '#reservation-popup',
+      type: 'inline',
+    },
+  });
 }
 
 console.log(previewConstructor);

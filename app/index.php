@@ -154,11 +154,11 @@
     <script type="text/javascript" src="slick/slick.min.js"></script>
     
     <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/mail.js"></script>
     <script src="js/aside.js"></script>
     <script src="js/filter.js"></script>
     <script src="js/yandexMap.js"></script>
     <script src="js/yandexMapConstructor.js"></script>
     <script src="js/filterConstructor.js"></script>
+    <script src="js/mail.js"></script>
   </body>
 </html>

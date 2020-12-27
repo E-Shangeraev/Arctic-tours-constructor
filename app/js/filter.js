@@ -67,6 +67,8 @@ let objFilter = {
   complexity: '0',
   priceMin: 500,
   priceMax: 1000000,
+  groupFrom: 1,
+  groupTo: 10,
 };
 
 function setFilter(url, callback) {
@@ -167,6 +169,15 @@ function setFilter(url, callback) {
         ],
         firstDay: 1,
       },
+    });
+
+    const timeOfTour = document.querySelector('input[name="birthday"]').value;
+    objFilter.timeOfTour = timeOfTour;
+
+    $('input[name="birthday"]').on('hide.daterangepicker', function () {
+      const timeOfTour = document.querySelector('input[name="birthday"]').value;
+      objFilter.timeOfTour = timeOfTour;
+      console.log(timeOfTour);
     });
   });
 
@@ -270,18 +281,18 @@ function showTourDescription(data) {
 
         <p class="filter__group-size">
           <span class="filter__item">Размер группы от </span>
-          <span class="filter__item filter__item--red group-from">2</span>
+          <span class="filter__item filter__item--red group-from">1</span>
           <span class="filter__item"> до </span>
-          <span class="filter__item filter__item--red group-to">10</span>
+          <span class="filter__item filter__item--red group-to">1</span>
           <span class="filter__item"> человек</span>
           <input
             type="text"
             class="range-group-size"
             name="range-group-size"
-            data-min="2"
-            data-max="20"
-            data-from="2"
-            data-to="10"
+            data-min="1"
+            data-max="10"
+            data-from="1"
+            data-to="1"
             data-grid="false"
           />
         </p>
@@ -302,7 +313,7 @@ function showTourDescription(data) {
 
         <div class="filter__total-price">
           <h3 class="filter__title" style="text-transform: uppercase">Итоговая стоимость:</h3>
-          <span class="filter__item filter__item--red">115 900</span>
+          <span class="filter__item filter__item--red total-price">${data.price}</span>
           <span class="filter__item"> рублей с человека</span>
         </div>
 
@@ -463,6 +474,11 @@ function showTourDescription(data) {
 
   const groupFrom = document.querySelector('.group-from');
   const groupTo = document.querySelector('.group-to');
+  const totalPrice = document.querySelector('.tour .total-price');
+  const price = data.price;
+
+  totalPrice.textContent = price;
+  objFilter.price = price;
 
   $('.range-group-size').ionRangeSlider({
     type: 'double',
@@ -470,16 +486,40 @@ function showTourDescription(data) {
     step: 1,
     onChange: function (data) {
       groupFrom.textContent = data.from;
+      objFilter.groupFrom = data.from;
       groupTo.textContent = data.to;
+      objFilter.groupTo = data.to;
+
+      const total = calcTotalPrice(objFilter.groupFrom, objFilter.groupTo, price);
+
+      objFilter.price = total;
+      totalPrice.textContent = total;
+
+      console.log(objFilter);
+      console.log(total);
     },
   });
 
-  $('.btn-reservation').magnificPopup({
+  $('.tour .btn-reservation').magnificPopup({
     items: {
       src: '#reservation-popup',
       type: 'inline',
     },
   });
+}
+
+function calcTotalPrice(min, max, price) {
+  price = Number(price);
+  const countOfPeople = max - min;
+  let discount = (price / 10) * countOfPeople;
+
+  if (countOfPeople === 0) {
+    discount = 0;
+  }
+
+  const total = price - discount;
+
+  return total;
 }
 
 // Клик по кнопке Подробно в превью списке туров
