@@ -36,6 +36,14 @@ async function postData(url, obj) {
   return await result;
 }
 
+// postData('config/getImage.php', 1).then((data) => {
+//   const img = `<img src="data:image/jpeg;base64, ${data}" alt=""/>`;
+//   console.log(img);
+// });
+
+{
+  /* <li class="preview__tour" style="background-image: url('img/${item.image}')" data-tour_id="${item.tour_id}"></li> */
+}
 function updatePreviewList(data) {
   previewList.innerHTML = '';
   if (data) {

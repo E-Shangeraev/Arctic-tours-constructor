@@ -1,11 +1,17 @@
 <?php
 
 $config = array(
+    // 'db' => array(
+    //     'server' => 'localhost',
+    //     'username' => 'mysql',
+    //     'password' => 'mysql',
+    //     'name' => 'a0488158_arctic' 
+    // )
     'db' => array(
         'server' => 'localhost',
         'username' => 'mysql',
         'password' => 'mysql',
-        'name' => 'a0488158_arctic' 
+        'name' => 'test_arctic' 
     )
     // 'db' => array(
     //     'server' => 'localhost',
