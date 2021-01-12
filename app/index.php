@@ -60,7 +60,7 @@
 
               <p class="ml-auto filter__cabinet">
                 <a href="#">Личный кабинет</a>
-                <img src="svg/user.svg" alt="" />
+                <img src="../wp-content/themes/listeo/svg/user.svg" alt="" />
               </p>
             </div>
 
@@ -109,8 +109,6 @@
             </div>
           </div>
           </section>
-
-          
       </section>
     </main>
 

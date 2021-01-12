@@ -45,9 +45,16 @@ if (isset($_POST['param'])) {
     $complexity = str_replace('"', '', $complexity);
   }
 
-  $routes = mysqli_query($connection, "SELECT * FROM routes WHERE ($territory) AND ($types) AND ($season) AND ($complexity) AND price > $priceMin AND price < $priceMax");
-    while( $route = mysqli_fetch_assoc($routes) ) {
+  $routes = mysqli_query($connection, "SELECT id, name, tour_id, price, complexity, summer, autumn, winter, spring, territory, helicopter, cruise, hiking, other FROM routes WHERE ($territory) AND ($types) AND ($season) AND ($complexity) AND (price > $priceMin) AND (price < $priceMax)");
+  $images = mysqli_query($connection, "SELECT image FROM routes WHERE ($territory) AND ($types) AND ($season) AND ($complexity) AND price > $priceMin AND price < $priceMax");
+
+  while( $route = mysqli_fetch_assoc($routes)) {
+    while($img = mysqli_fetch_assoc($images)) {
+      $route['image'] = base64_encode($img['image']);
       $arr[] = $route;
+      break;
     }
+  }
+
   echo json_encode($arr);
 }

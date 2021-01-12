@@ -9,6 +9,12 @@ $config = array(
     )
     // 'db' => array(
     //     'server' => 'localhost',
+    //     'username' => 'root',
+    //     'password' => 'root',
+    //     'name' => 'arctic' 
+    // )
+    // 'db' => array(
+    //     'server' => 'localhost',
     //     'username' => 'u0965960_default',
     //     'password' => 'E6h_!1_n',
     //     'name' => 'u0965960_default'

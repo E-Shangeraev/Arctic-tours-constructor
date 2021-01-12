@@ -22,15 +22,50 @@ function showLocaleDescription(data) {
   if (document.querySelector('.tour-constructor')) {
     filter.removeChild(document.querySelector('.tour-constructor'));
   }
-  let facts = data.facts.split(';');
-  facts = facts.map((item) => {
-    return `
-    <li class="locale__fact">
-      <img src="svg/locale-facts/tambourine.svg" alt="" />
-      <p class="locale__descr locale__descr--fact">${item}</p>
-    </li>`;
-  });
-  facts = facts.toString().replace(/,/g, '');
+
+  let fact1 = data['fact-1'];
+  let fact2 = data['fact-2'];
+  let fact3 = data['fact-3'];
+  let fact4 = data['fact-4'];
+  let factImage1 = data['img-1'];
+  let factImage2 = data['img-2'];
+  let factImage3 = data['img-3'];
+  let factImage4 = data['img-4'];
+  let facts = [];
+
+  if (fact1) {
+    facts.push(`
+      <li class="locale__fact">
+        <img src="data:image/svg+xml;base64, ${factImage1}" alt="" />
+        <p class="locale__descr locale__descr--fact">${fact1}</p>
+      </li>
+    `);
+  }
+  if (fact2) {
+    facts.push(`
+      <li class="locale__fact">
+        <img src="data:image/svg+xml;base64, ${factImage2}" alt="" />
+        <p class="locale__descr locale__descr--fact">${fact2}</p>
+      </li>
+    `);
+  }
+  if (fact3) {
+    facts.push(`
+      <li class="locale__fact">
+        <img src="data:image/svg+xml;base64, ${factImage3}" alt="" />
+        <p class="locale__descr locale__descr--fact">${fact3}</p>
+      </li>
+    `);
+  }
+  if (fact4) {
+    facts.push(`
+      <li class="locale__fact">
+        <img src="data:image/svg+xml;base64, ${factImage4}" alt="" />
+        <p class="locale__descr locale__descr--fact">${fact4}</p>
+      </li>
+    `);
+  }
+  facts = facts.join('');
 
   let transport = data.transport.split(';');
   console.log(transport);
@@ -91,7 +126,7 @@ function showLocaleDescription(data) {
         </div>
 
         <div class="filter__reservation">
-          <button class="btn-reservation">Добавить в тур</button>
+          <button class="btn-reservation" id="addFromDesc">Добавить в тур</button>
         </div>
       </div>
     </aside>
@@ -104,7 +139,7 @@ function showLocaleDescription(data) {
       <p class="locale__descr">${data.intro}</p>
 
       <div class="locale__promo">
-        <img class="locale__img" src="${data.image}" alt="Фотография с локации" />
+        <img class="locale__img" src="data:image/jpeg;base64, ${data.image}" alt="Фотография с локации" />
       </div>
 
       <p class="locale__descr">${data.description}</p>
@@ -151,55 +186,51 @@ function showTourConstructor(data) {
 
   console.log(data);
 
-  // let facts = data.facts.split(';');
-  // facts = facts.map((item) => {
-  //   return `
-  //   <li class="locale__fact">
-  //     <img src="svg/locale-facts/tambourine.svg" alt="" />
-  //     <p class="locale__descr locale__descr--fact">${item}</p>
-  //   </li>`;
-  // });
-  // facts = facts.toString().replace(/,/g, '');
   let title = data.map((item) => item.territory);
   title = title.join(' - ');
   console.log(title);
 
   let image = data.map((item) => {
     return `
-    <div class="tour__slide" style="background-image: url('${item.image}')">
+    <div class="tour__slide" style="background-image: url('data:image/jpeg;base64, ${item.image}')">
       <span class="slide__name">${item.territory}</span>
     </div>
     `;
   });
-  image = image.toString().replace(/,/g, '');
+  image = image.join('');
 
-  let facts = data.map((item, index) => {
-    let localeFacts = item.facts.split(';');
-    return `
-    <li>
-      <div class="locale__fact">
-        <img src='svg/locale-facts/fishing_rod.svg' alt="" />
-        <p class="filter__item">
-          ${localeFacts}. Здесь вы пробудете 
-          <span class="filter__item filter__item--red day-count-${index}">1 день</span>.
-        </p>
-      </div>
-      <div class="filter__group-size">
-        <span class="filter__item">Длительность вашего пребывания здесь:</span>
-        <input
-          type="text"
-          class="range-day-count-${index}"
-          name="range-day-count"
-          data-min="1"
-          data-max="30"
-          data-from="1"
-          data-grid="false"
-        />
-      </div><br><br>
-    </li>
-  `;
+  let facts = [];
+
+  data.forEach((item, index) => {
+    let fact = item['fact-1'];
+    let factImage = item['img-1'];
+
+    facts.push(`
+      <li>
+        <div class="locale__fact">
+          <img src='data:image/svg+xml;base64, ${factImage}' alt="" />
+          <p class="filter__item">
+            ${fact}. Здесь вы пробудете 
+            <span class="filter__item filter__item--red day-count-${index}">1 день</span>.
+          </p>
+        </div>
+        <div class="filter__group-size">
+          <span class="filter__item">Длительность вашего пребывания здесь:</span>
+          <input
+            type="text"
+            class="range-day-count-${index}"
+            name="range-day-count"
+            data-min="1"
+            data-max="30"
+            data-from="1"
+            data-grid="false"
+          />
+        </div><br><br>
+      </li>
+    `);
   });
-  facts = facts.toString().replace(/,/g, '');
+
+  facts = facts.join('');
 
   let program = data.map((item, index) => {
     return `
@@ -212,7 +243,7 @@ function showTourConstructor(data) {
       </li>
     `;
   });
-  program = program.toString().replace(',', '');
+  program = program.join('');
 
   const tourConstructor = `
   <section class="row tour-constructor">

@@ -45,9 +45,17 @@ if (isset($_POST['param'])) {
     $complexity = str_replace('"', '', $complexity);
   }
 
-  $locales = mysqli_query($connection, "SELECT * FROM locales WHERE ($territory) AND ($types) AND ($season) AND ($complexity) AND price >= $priceMin AND price <= $priceMax");
-    while( $loc = mysqli_fetch_assoc($locales) ) {
+  $locales = mysqli_query($connection, "SELECT id, loc_id, `name`, price, complexity, summer, autumn, winter, spring, helicopter, cruise, hiking, other, territory, preview_text, coords_x, coords_y FROM locales WHERE ($territory) AND ($types) AND ($season) AND ($complexity) AND price >= $priceMin AND price <= $priceMax");
+  $images = mysqli_query($connection, "SELECT image FROM locales WHERE ($territory) AND ($types) AND ($season) AND ($complexity) AND price >= $priceMin AND price <= $priceMax");
+
+  while( $loc = mysqli_fetch_assoc($locales) ) {
+    while($img = mysqli_fetch_assoc($images)) {
+      $loc['image'] = base64_encode($img['image']);
       $arr[] = $loc;
+      break;
     }
+    // $arr[] = $loc;
+  }
+  
   echo json_encode($arr);
 }

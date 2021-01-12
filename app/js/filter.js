@@ -1,6 +1,5 @@
 const btnToggle = document.querySelectorAll('.filter__toggle');
 const dropdownToggle = document.querySelectorAll('.btn.dropdown-toggle');
-const dropdownItem = document.querySelectorAll('.dropdown-item');
 
 const filter = document.querySelector('.filter');
 const filterSettings = document.querySelector('.filter__settings');
@@ -12,12 +11,6 @@ const previewTourShow = document.querySelector('.preview__tour-show');
 
 const readyTab = document.querySelector('#pills-ready-tab');
 const constructorTab = document.querySelector('#pills-constructor-tab');
-
-dropdownItem.forEach((drp) => {
-  drp.addEventListener('click', () => {
-    drp.parentElement.previousElementSibling.children[0].textContent = drp.textContent;
-  });
-});
 
 async function postData(url, obj) {
   const result = await fetch(url, {
@@ -36,12 +29,33 @@ async function postData(url, obj) {
   return await result;
 }
 
+function postNew(url, obj) {
+  $(function () {
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: obj,
+      success: success,
+    }).done(function () {
+      console.log('hello');
+    });
+  });
+}
+
+// postData('config/getImage.php', 1).then((data) => {
+//   const img = `<img src="data:image/jpeg;base64, ${data}" alt=""/>`;
+//   console.log(img);
+// });
+
+{
+  /* <li class="preview__tour" style="background-image: url('img/${item.image}')" data-tour_id="${item.tour_id}"></li> */
+}
 function updatePreviewList(data) {
   previewList.innerHTML = '';
   if (data) {
     data.forEach((item) => {
       const li = `
-      <li class="preview__tour" style="background-image: url('img/${item.image}')" data-tour_id="${item.tour_id}">
+      <li class="preview__tour" style="background-image: url('data:image/jpeg;base64,${item.image}')" data-tour_id="${item.tour_id}">
         <h4 class="preview__tour-name">${item.name}</h4>
         <a class="preview__tour-show" href="#">Подробно</a>
       </li>
@@ -71,6 +85,13 @@ let objFilter = {
   groupTo: 10,
 };
 
+let objImage = {
+  field: ['image'],
+  table: 'routes',
+  var: 'tour_id',
+  id: [],
+};
+
 function setFilter(url, callback) {
   const territoryFilter = document.querySelectorAll(`.territory a`);
   const typesFilter = document.querySelectorAll(`.filter__types .filter__toggle`);
@@ -78,6 +99,13 @@ function setFilter(url, callback) {
   const complexity = document.querySelector('.complexity');
   const from = document.querySelector('.price-from');
   const to = document.querySelector('.price-to');
+  const dropdownItem = document.querySelectorAll('.dropdown-item');
+
+  dropdownItem.forEach((drp) => {
+    drp.addEventListener('click', () => {
+      drp.parentElement.previousElementSibling.children[0].textContent = drp.textContent;
+    });
+  });
   // const filterComplexity = document.querySelector(`.filter__complexity input`);
 
   // Получение начальных данных по турам без фильтрации
@@ -260,15 +288,20 @@ function showTourDescription(data) {
   }
   console.log(data);
 
-  let actions = data.actions.split(';');
-  actions = actions.map((item) => {
-    return `
-    <li class="tour__action">
-      <img src="svg/tour-actions/helicopter.svg" alt="" />
-      <p class="tour__descr tour__descr--action">${item}</p>
-    </li>`;
+  // let actions = data.actions.split(';');
+  let actions = [data['action-1'], data['action-2'], data['action-3'], data['action-4']];
+  actions = actions.map((item, index) => {
+    if (item) {
+      const actionImage = data[`action-img-${index + 1}`];
+      return `
+      <li class="tour__action">
+        <img src="data:image/svg+xml;base64, ${actionImage}" alt="" />
+        <p class="tour__descr tour__descr--action">${item}</p>
+      </li>`;
+    }
   });
-  actions = actions.toString().replace(/,/g, '');
+  // actions = actions.toString().replace(/,/g, '');
+  actions = actions.join('');
 
   const tourDesc = `
     <section class="row tour">
@@ -355,7 +388,7 @@ function showTourDescription(data) {
       <p class="tour__descr">${data.intro}</p>
 
       <div class="tour__promo">
-        <img class="tour__img" src="${data.image_1}" alt="Фотография с локации" />
+        <img class="tour__img" src="data:image/jpeg;base64, ${data['image_1']}" alt="Фотография с локации" />
         <p class="tour__warning warning">
           <b class="warning__title">ОБРАТИТЕ ВНИМАНИЕ!</b>
           <span class="warning__text">
@@ -453,7 +486,7 @@ function showTourDescription(data) {
       </p>
 
       <div class="tour__promo">
-        <img class="tour__img" src="${data.image_2}" alt="Фотография с тура" />
+        <img class="tour__img" src="data:image/jpeg;base64, ${data['image_2']}" alt="Фотография с тура" />
       </div>
     </article>
 
@@ -476,6 +509,7 @@ function showTourDescription(data) {
   const groupTo = document.querySelector('.group-to');
   const totalPrice = document.querySelector('.tour .total-price');
   const price = data.price;
+  console.log(data);
 
   totalPrice.textContent = price;
   objFilter.price = price;
@@ -530,6 +564,7 @@ previewList.addEventListener('click', (e) => {
   const objShow = { tourId: tourId };
 
   postData('filters/tours_description.php', objShow).then((data) => {
+    console.log(data);
     console.log(data.actions);
     showTourDescription(data);
   });
@@ -551,6 +586,17 @@ readyTab.addEventListener('click', () => {
   if (document.querySelector('.tour-constructor')) {
     filter.removeChild(document.querySelector('.tour-constructor'));
   }
+
+  let objFilter = {
+    territory: 'Не выбрано',
+    types: [],
+    season: 'Не выбрано',
+    complexity: '0',
+    priceMin: 500,
+    priceMax: 1000000,
+    groupFrom: 1,
+    groupTo: 10,
+  };
 
   setFilter('filters/filter.php', updatePreviewList);
 });
