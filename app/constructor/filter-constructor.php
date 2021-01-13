@@ -17,8 +17,11 @@ if (isset($_POST['param'])) {
     $territory = str_replace('"', '', $territory);
   }
   if ($territory === 'Не выбрано') {
-    $territory = "territory = 'Плато Путорана' OR territory = 'Озеро Лама' OR territory = 'Озеро Хантайское' OR territory = 'Пос. Снежногорск' OR territory = 'Город Дудинка'  OR territory = 'Красные камни'";
-    $territory = str_replace('"', '', $territory);
+    $availableTerritory = mysqli_query($connection, "SELECT territory FROM locales");
+    while( $available = mysqli_fetch_assoc($availableTerritory)) {
+      $t[] = 'territory = \'' . $available['territory'];
+    }
+    $territory = implode("' OR ", $t) . "'";
   }
 
   if (!empty($types)) {
