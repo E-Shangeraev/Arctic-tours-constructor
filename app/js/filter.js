@@ -29,27 +29,14 @@ async function postData(url, obj) {
   return await result;
 }
 
-function postNew(url, obj) {
-  $(function () {
-    $.ajax({
-      type: 'POST',
-      url: url,
-      data: obj,
-      success: success,
-    }).done(function () {
-      console.log('hello');
-    });
+function getTerritory(data) {
+  let availableTerritories = data.map((item) => {
+    return `<a class="dropdown-item" href="#">${item.territory}</a>`;
   });
+  availableTerritories = availableTerritories.join('');
+  return availableTerritories;
 }
 
-// postData('config/getImage.php', 1).then((data) => {
-//   const img = `<img src="data:image/jpeg;base64, ${data}" alt=""/>`;
-//   console.log(img);
-// });
-
-{
-  /* <li class="preview__tour" style="background-image: url('img/${item.image}')" data-tour_id="${item.tour_id}"></li> */
-}
 function updatePreviewList(data) {
   previewList.innerHTML = '';
   if (data) {
@@ -93,7 +80,7 @@ let objImage = {
 };
 
 function setFilter(url, callback) {
-  const territoryFilter = document.querySelectorAll(`.territory a`);
+  const territoryFilter = document.querySelector(`.territory`);
   const typesFilter = document.querySelectorAll(`.filter__types .filter__toggle`);
   const filterSeason = document.querySelectorAll(`.filter__season a`);
   const complexity = document.querySelector('.complexity');
@@ -101,12 +88,18 @@ function setFilter(url, callback) {
   const to = document.querySelector('.price-to');
   const dropdownItem = document.querySelectorAll('.dropdown-item');
 
+  postData('config/get-territory.php', {}).then((data) => {
+    const availableTerritories = getTerritory(data);
+    document
+      .querySelector('.dropdown-menu.territory')
+      .insertAdjacentHTML('beforeend', availableTerritories);
+  });
+
   dropdownItem.forEach((drp) => {
     drp.addEventListener('click', () => {
       drp.parentElement.previousElementSibling.children[0].textContent = drp.textContent;
     });
   });
-  // const filterComplexity = document.querySelector(`.filter__complexity input`);
 
   // Получение начальных данных по турам без фильтрации
   function defaultFilter(obj) {
@@ -118,15 +111,27 @@ function setFilter(url, callback) {
   defaultFilter(objFilter);
 
   // Фильтр - Территория проведения туров
-  territoryFilter.forEach((item) => {
-    item.addEventListener('click', (e) => {
-      objFilter.territory = e.target.textContent;
-      postData(url, objFilter).then((data) => {
-        console.log(data);
-        callback(data);
-      });
+  territoryFilter.addEventListener('click', (e) => {
+    if (!e.target.closest('.territory a')) return;
+    objFilter.territory = e.target.textContent;
+    e.target.parentElement.previousElementSibling.children[0].textContent = e.target.textContent;
+    postData(url, objFilter).then((data) => {
+      console.log(data);
+      callback(data);
     });
   });
+
+  // territoryFilter.forEach((item) => {
+  //   console.log(item);
+
+  //   item.addEventListener('click', (e) => {
+  //     objFilter.territory = e.target.textContent;
+  //     postData(url, objFilter).then((data) => {
+  //       console.log(data);
+  //       callback(data);
+  //     });
+  //   });
+  // });
 
   // Фильтр - Искомые типы туров
 
@@ -288,7 +293,6 @@ function showTourDescription(data) {
   }
   console.log(data);
 
-  // let actions = data.actions.split(';');
   let actions = [data['action-1'], data['action-2'], data['action-3'], data['action-4']];
   actions = actions.map((item, index) => {
     if (item) {
@@ -300,8 +304,28 @@ function showTourDescription(data) {
       </li>`;
     }
   });
-  // actions = actions.toString().replace(/,/g, '');
   actions = actions.join('');
+
+  let lodging = [];
+  if (data['lodging-1']) {
+    const lodging1 = `
+    <li class="filter__lodging-item">
+      <img src="data:image/svg+xml;base64, ${data['lodging-img-1']}" alt="${data['lodging-1']}" />
+      <span class="filter__item">${data['lodging-1']}</span>
+    </li>
+    `;
+    lodging.push(lodging1);
+  }
+  if (data['lodging-2']) {
+    const lodging2 = `
+    <li class="filter__lodging-item">
+      <img src="data:image/svg+xml;base64, ${data['lodging-img-2']}" alt="${data['lodging-2']}" />
+      <span class="filter__item">${data['lodging-2']}</span>
+    </li>
+    `;
+    lodging.push(lodging2);
+  }
+  lodging = lodging.join('');
 
   const tourDesc = `
     <section class="row tour">
@@ -332,16 +356,7 @@ function showTourDescription(data) {
 
         <div class="filter__lodging">
           <h3 class="filter__title">Проживание во время тура:</h3>
-          <ul class="filter__lodging-list">
-            <li class="filter__lodging-item">
-              <img src="svg/tent.svg" alt="${data.tent}" />
-              <span class="filter__item">${data.tent}</span>
-            </li>
-            <li class="filter__lodging-item">
-              <img src="svg/hotel.svg" alt="${data.hotel}" />
-              <span class="filter__item">${data.hotel}</span>
-            </li>
-          </ul>
+          <ul class="filter__lodging-list">${lodging}</ul>
         </div>
 
         <div class="filter__total-price">

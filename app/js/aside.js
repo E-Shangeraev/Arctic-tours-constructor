@@ -18,11 +18,6 @@ const filterReady = `
       <div class="dropdown-menu territory" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="#">Не выбрано</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Плато Путорана</a>
-        <a class="dropdown-item" href="#">Озеро Лама</a>
-        <a class="dropdown-item" href="#">Озеро Хантайское</a>
-        <a class="dropdown-item" href="#">Пос. Снежногорск</a>
-        <a class="dropdown-item" href="#">Город Дудинка</a>
       </div>
     </div>
   </div>
@@ -130,11 +125,6 @@ const filterConstructor = `
       <div class="dropdown-menu territory" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="#">Не выбрано</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Плато Путорана</a>
-        <a class="dropdown-item" href="#">Озеро Лама</a>
-        <a class="dropdown-item" href="#">Озеро Хантайское</a>
-        <a class="dropdown-item" href="#">Пос. Снежногорск</a>
-        <a class="dropdown-item" href="#">Город Дудинка</a>
       </div>
     </div>
   </div>

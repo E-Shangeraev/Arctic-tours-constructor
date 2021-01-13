@@ -67,45 +67,69 @@ function showLocaleDescription(data) {
   }
   facts = facts.join('');
 
-  let transport = data.transport.split(';');
-  console.log(transport);
-  transport = transport.map((item) => {
-    let img;
-    item = item.trim();
+  let transport = [];
+  if (data['transport-1']) {
+    const transport1 = `
+      <li class="filter__transport-item">
+        <img src="data:image/svg+xml;base64, ${data['transport-img-1']}" alt="${data['transport-1']}" />
+        <span class="filter__item">${data['transport-1']}</span>
+      </li>
+    `;
+    transport.push(transport1);
+  }
+  if (data['transport-2']) {
+    const transport2 = `
+      <li class="filter__transport-item">
+        <img src="data:image/svg+xml;base64, ${data['transport-img-2']}" alt="${data['transport-2']}" />
+        <span class="filter__item">${data['transport-2']}</span>
+      </li>
+    `;
+    transport.push(transport2);
+  }
+  transport = transport.join('');
 
-    if (item === 'Вертолет') {
-      img = 'svg/locale-transports/helicopter.svg';
-    }
-    if (item === 'Судно на воздушной подушке') {
-      img = 'svg/locale-transports/hovercraft.svg';
-    }
+  let lodging = [];
+  if (data['lodging-1']) {
+    const lodging1 = `
+      <li class="filter__lodging-item">
+        <img src="data:image/svg+xml;base64, ${data['lodging-img-1']}" alt="${data['lodging-1']}" />
+        <span class="filter__item">${data['lodging-1']}</span>
+      </li>
+    `;
+    lodging.push(lodging1);
+  }
+  if (data['lodging-2']) {
+    const lodging2 = `
+      <li class="filter__lodging-item">
+        <img src="data:image/svg+xml;base64, ${data['lodging-img-2']}" alt="${data['lodging-2']}" />
+        <span class="filter__item">${data['lodging-2']}</span>
+      </li>
+    `;
+    lodging.push(lodging2);
+  }
+  lodging = lodging.join('');
 
-    return `
-    <li class="filter__transport-item">
-      <img src=${img} alt="${item}" />
-      <span class="filter__item">${item}</span>
-    </li>`;
-  });
-  transport = transport.toString().replace(/,/g, '');
+  let localeInteresting = [];
+  if (data['subtitle-1']) {
+    const subtitle1 = `
+      <li>
+        <h3 class="filter__title">${data['subtitle-1']}</h3>
+        <p class="locale__descr">${data['desc-1']}</p>
+      </li>
+    `;
+    localeInteresting.push(subtitle1);
+  }
+  if (data['subtitle-2']) {
+    const subtitle2 = `
+      <li>
+        <h3 class="filter__title">${data['subtitle-2']}</h3>
+        <p class="locale__descr">${data['desc-2']}</p>
+      </li>
+    `;
+    localeInteresting.push(subtitle2);
+  }
 
-  let lodging = data.lodging.split(';');
-  lodging = lodging.map((item) => {
-    let img;
-    item = item.trim();
-    if (item === 'Палатка') {
-      img = 'svg/locale-transports/tent.svg';
-    }
-    if (item === 'Ночлег у местных жителей') {
-      img = 'svg/locale-transports/hut.svg';
-    }
-
-    return `
-    <li class="filter__lodging-item">
-      <img src=${img} alt="${item}" />
-      <span class="filter__item">${item}</span>
-    </li>`;
-  });
-  lodging = lodging.toString().replace(/,/g, '');
+  localeInteresting = localeInteresting.join('');
 
   const locDesc = `
   <section class="row locale">
@@ -141,6 +165,8 @@ function showLocaleDescription(data) {
       <div class="locale__promo">
         <img class="locale__img" src="data:image/jpeg;base64, ${data.image}" alt="Фотография с локации" />
       </div>
+
+      <ul class="locale__description">${localeInteresting}</ul>
 
       <p class="locale__descr">${data.description}</p>
 
