@@ -185,7 +185,7 @@ function init() {
           let obj = {
             coords,
             name: item.name,
-            image: `img/${item.image}`,
+            image: `data:image/jpeg;base64, ${item.image}`,
             text: item.text,
           };
 

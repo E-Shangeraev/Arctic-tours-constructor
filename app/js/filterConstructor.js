@@ -149,9 +149,7 @@ function showLocaleDescription(data) {
           <ul class="filter__lodging-list">${lodging}</ul>
         </div>
 
-        <div class="filter__reservation">
-          <button class="btn-reservation" id="addFromDesc">Добавить в тур</button>
-        </div>
+        
       </div>
     </aside>
 
@@ -312,7 +310,7 @@ function showTourConstructor(data) {
         </div>
 
         <div class="filter__reservation">
-          <button class="btn-reservation">Забронировать</button>
+          <button class="btn-reservation" id="constructor-reserve">Забронировать</button>
         </div>
       </div>
     </aside>
@@ -437,7 +435,11 @@ function showTourConstructor(data) {
     },
   });
 
-  const btnReserv = document.querySelector('.tour-constructor .btn-reservation');
+  $('#reserve').click(function () {
+    $('.mfp-close').trigger('click');
+  });
+
+  const btnReserv = document.querySelector('#constructor-reserve');
   btnReserv.addEventListener('click', () => {
     const locDays = document.querySelectorAll('.locale__fact span');
     let days = objFilter.territory.split('-');
@@ -451,7 +453,7 @@ function showTourConstructor(data) {
       .split(';')
       .filter((item) => item);
 
-    objFilter.territory = days.join(' - ');
+    objFilter.constructorTour = days.join(' - ');
   });
 }
 
@@ -475,15 +477,6 @@ previewConstructor.addEventListener('click', (e) => {
   postData('constructor/constructor.php', obj).then((data) => {
     showTourConstructor(data);
   });
-});
-
-// Сворачаивание/разворачивание превью списка туров
-
-preview.addEventListener('click', (e) => {
-  if (!e.target.closest('.preview__arrow')) return;
-
-  e.target.classList.toggle('preview__arrow--close');
-  previewList.classList.toggle('preview__list--close');
 });
 
 // Сворачаивание/разворачивание превью списка туров

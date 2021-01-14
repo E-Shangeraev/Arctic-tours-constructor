@@ -114,8 +114,13 @@ function init() {
         // Сначала вызываем метод build родительского класса.
         MyBalloonContentLayout.superclass.build.call(this);
         // А затем выполняем дополнительные действия.
+        function bindAddTour() {
+          $('#addFromDesc').bind('click', this.onAddClick);
+          console.log(this);
+        }
         const add = $('#add');
         const more = $('#more');
+
         add.bind('click', this.onAddClick);
         more.bind('click', this.onMoreClick);
       },
@@ -131,6 +136,7 @@ function init() {
 
       onAddClick: function () {
         console.log('this work!');
+        console.log(this);
         const previewListConstructor = document.querySelector(
           '#preview-constructor .preview__list',
         );
@@ -261,7 +267,7 @@ function init() {
           });
       },
 
-      onMoreClick: function () {
+      onMoreClick: () => {
         const locId = document.querySelector('.popover--constructor').dataset.loc_id;
         const obj = { locId };
 
@@ -405,6 +411,9 @@ function init() {
     filterSettings.classList.remove('ready');
     filterSettings.classList.add('constructor');
     preview.style.display = 'none';
+
+    objFilter.for = 'constructor';
+
     if (document.querySelector('.tour')) {
       document.querySelector('.tour').remove();
     }

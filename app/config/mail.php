@@ -11,6 +11,15 @@
     $groupFrom = $post->groupFrom;
     $groupTo = $post->groupTo;
     $price = $post->price;
+
+    if ($post->selectedTour) {
+      $selectedTour = $post->selectedTour;
+      $rowTitle = 'Название готового тура';
+    }
+    if ($post->constructorTour) {
+      $selectedTour = $post->constructorTour;
+      $rowTitle = 'Сконструированный тур';
+    }
     
     if (!empty($types)) {
       foreach($types as $key => $type) {
@@ -62,7 +71,7 @@
       $season = 'Весна';
     }
 
-    $to = ' eldar@mygang.ru';
+    $to = 'eldar@mygang.ru';
     $subject = 'Обратная связь с сайта';
     $message = 
     '<table style="border-collapse: collapse;>
@@ -75,24 +84,12 @@
         <td style="border: 1px solid #cccccc;">' . $phone . '</td>
       </tr>
       <tr>
-        <td style="border: 1px solid #cccccc;"><b>Территория проведения тура: </b></td>
-        <td style="border: 1px solid #cccccc;">' . $territory . '</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #cccccc;"><b>Тип(ы) тура: </b></td>
-        <td style="border: 1px solid #cccccc;">' . $types . '</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #cccccc;"><b>Сезон проведения тура: </b></td>
-        <td style="border: 1px solid #cccccc;">' . $season . '</td>
+        <td style="border: 1px solid #cccccc;"><b>' . $rowTitle . ': </b></td>
+        <td style="border: 1px solid #cccccc;">' . $selectedTour . '</td>
       </tr>
       <tr>
         <td style="border: 1px solid #cccccc;"><b>Время проведения тура: </b></td>
         <td style="border: 1px solid #cccccc;">' . $timeOfTour . '</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #cccccc;"><b>Сложность тура: </b></td>
-        <td style="border: 1px solid #cccccc;">' . $complexity . '</td>
       </tr>
       <tr>
         <td style="border: 1px solid #cccccc;"><b>Размер группы от: </b></td>
@@ -107,8 +104,8 @@
         <td style="border: 1px solid #cccccc;">' . $price . ' рублей с человека </td>
       </tr>
     </table>';
-  
-    $header = "From: ivan@example.com\r\n" ."Content-type: text/html; charset=utf-8\r\n" ."X-Mailer: PHP mail script";
+    
+    $header = "From: visit-arctic-russia.ru\r\n" ."Content-type: text/html; charset=utf-8\r\n" ."X-Mailer: PHP mail script";
     echo json_encode($post);
   
     mail("$to", "$subject", "$message", "$header");

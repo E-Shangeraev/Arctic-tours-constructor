@@ -8,6 +8,10 @@ form.addEventListener('submit', (e) => {
   objFilter.name = inputName.value;
   objFilter.phone = inputPhone.value;
 
+  if (document.querySelector('.tour__name')) {
+    objFilter.selectedTour = document.querySelector('.tour__name').textContent;
+  }
+
   console.log(objFilter);
 
   postData('config/mail.php', objFilter)

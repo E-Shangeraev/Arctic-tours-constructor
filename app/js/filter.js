@@ -30,8 +30,17 @@ async function postData(url, obj) {
 }
 
 function getTerritory(data) {
-  let availableTerritories = data.map((item) => {
-    return `<a class="dropdown-item" href="#">${item.territory}</a>`;
+  let arr = data.map((item) => item.territory);
+  let uniqueTerritory = [];
+
+  for (let territory of arr) {
+    if (!uniqueTerritory.includes(territory)) {
+      uniqueTerritory.push(territory);
+    }
+  }
+
+  let availableTerritories = uniqueTerritory.map((item) => {
+    return `<a class="dropdown-item" href="#">${item}</a>`;
   });
   availableTerritories = availableTerritories.join('');
   return availableTerritories;
@@ -70,13 +79,7 @@ let objFilter = {
   priceMax: 1000000,
   groupFrom: 1,
   groupTo: 10,
-};
-
-let objImage = {
-  field: ['image'],
-  table: 'routes',
-  var: 'tour_id',
-  id: [],
+  for: 'ready',
 };
 
 function setFilter(url, callback) {
@@ -88,8 +91,8 @@ function setFilter(url, callback) {
   const to = document.querySelector('.price-to');
   const dropdownItem = document.querySelectorAll('.dropdown-item');
 
-  postData('config/get-territory.php', {}).then((data) => {
-    const availableTerritories = getTerritory(data);
+  postData('config/get-territory.php', objFilter).then((data) => {
+    let availableTerritories = getTerritory(data);
     document
       .querySelector('.dropdown-menu.territory')
       .insertAdjacentHTML('beforeend', availableTerritories);
@@ -120,18 +123,6 @@ function setFilter(url, callback) {
       callback(data);
     });
   });
-
-  // territoryFilter.forEach((item) => {
-  //   console.log(item);
-
-  //   item.addEventListener('click', (e) => {
-  //     objFilter.territory = e.target.textContent;
-  //     postData(url, objFilter).then((data) => {
-  //       console.log(data);
-  //       callback(data);
-  //     });
-  //   });
-  // });
 
   // Фильтр - Искомые типы туров
 
@@ -327,6 +318,21 @@ function showTourDescription(data) {
   }
   lodging = lodging.join('');
 
+  let dayTitle = data['day-title'].replace(/\r?\n/g, '').split(';');
+  let dayDesc = data['day-desc'].replace(/\r?\n/g, '').split(';');
+  let days = dayTitle.map((day, index) => {
+    return `
+      <li class="program__item">
+        <h4 class="program__day">
+          <span>> День ${index + 1}: </span>
+          <span>${day}</span>
+        </h4>
+        <p class="program__descr">${dayDesc[index]}</p>
+      </li>
+    `;
+  });
+  days = days.join('');
+
   const tourDesc = `
     <section class="row tour">
     <aside class="col-sm-3 filter__settings filter__settings--tour">
@@ -420,80 +426,7 @@ function showTourDescription(data) {
 
       <p class="tour__descr">${data.program_intro}</p>
 
-      <ul class="program">
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> День 1: </span>
-            <span>Вертолетная заброска на Микчангду</span>
-          </h4>
-          <p class="program__descr">
-            Вас ждет посадка на вертолет МИ-8 и заброска к месту начала маршрута на реке
-            Микчангда. Она течет в самом центре плато Путорана, а горы, окружающие долину
-            реки, — одни из самых высоких на плато (1200-1300 м). Прибыв на место, вы
-            разобьете лагерь и пообедаете. После совершите небольшое путешествие к водопаду
-            Орлиный высотой более 60 метров (2 км в пути, с набором высоты 250 м). Затем
-            вернетесь в лагерь, поужинаете у костра и заночуете в палатках.
-          </p>
-        </li>
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> День 2: </span>
-            <span>Начало сплава</span>
-          </h4>
-          <p class="program__descr">
-            После завтрака вы пройдете ускоренный курс навыков сплава на рафтах и отправитесь
-            в водное путешествие по долине реки Микчангда. На обед вы остановитесь на
-            живописном перекате реки, где сможете отдохнуть и порыбачить. После обеда вы
-            продолжите сплав. На пути вам встретится не тающий ледник, вы остановитесь, чтобы
-            его осмотреть. Ближе к вечеру вы выберете место для лагеря в дельте одной из рек,
-            впадающих в Микчангду. Установите палатки, поужинаете и отдохнете. Протяженность
-            сплава — 25-30 км.
-          </p>
-        </li>
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> День 3: </span>
-            <span>Начало сплава</span>
-          </h4>
-          <p class="program__descr">
-            После завтрака вы продолжите сплавляться на рафтах по реке Микчангда до дельты
-            реки Абагалах. В этом месте участок реки сильно разветвляется, образуя сеть из
-            сотен островов. Так что во время прохождения маршрута вам придется приложить
-            немалые усилия, чтобы попадать в русло. Днем вы сделаете привал для обеда и
-            рыбалки, а вечером разобьете лагерь, поужинаете у костра и отдохнете.
-            Протяженность сплава — 30-35 км.
-          </p>
-        </li>
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> День 4: </span>
-            <span>Начало сплава</span>
-          </h4>
-          <p class="program__descr">
-            После завтрака вы продолжите сплавляться на рафтах по реке Микчангда до дельты
-            реки Абагалах. В этом месте участок реки сильно разветвляется, образуя сеть из
-            сотен островов. Так что во время прохождения маршрута вам придется приложить
-            немалые усилия, чтобы попадать в русло. Днем вы сделаете привал для обеда и
-            рыбалки, а вечером разобьете лагерь, поужинаете у костра и отдохнете.
-            Протяженность сплава — 30-35 км.
-          </p>
-        </li>
-        <li class="program__item">
-          <h4 class="program__day">
-            <span>> День 5: </span>
-            <span>Выход к озеру Лама</span>
-          </h4>
-          <p class="program__descr">
-            После завтрака вы пройдете на рафтах под веслами сложную дельту реки Микчангда, а
-            затем, выйдя на озеро Лама, включите моторы. К обеду причалите к берегу и
-            прогуляетесь к живописному водопаду «Бомба» высотой более 30 метров (5 км в пути с
-            набором высоты 150 метров). После прогулки вы пообедаете и отправитесь на рафтах
-            по озеру Лама до полуострова Каменный, где разместитесь в кемпинге. Вечером вас
-            ужин с национальными блюдами народов Севера, а также горячая баня с купанием в
-            озере Лама.
-          </p>
-        </li>
-      </ul>
+      <ul class="program">${days}</ul>
 
       <p class="tour__descr">
         <b style="display: block">Проживание во время тура</b>
@@ -555,6 +488,9 @@ function showTourDescription(data) {
       type: 'inline',
     },
   });
+  $('#reserve').click(function () {
+    $('.mfp-close').trigger('click');
+  });
 }
 
 function calcTotalPrice(min, max, price) {
@@ -602,7 +538,7 @@ readyTab.addEventListener('click', () => {
     filter.removeChild(document.querySelector('.tour-constructor'));
   }
 
-  let objFilter = {
+  objFilter = {
     territory: 'Не выбрано',
     types: [],
     season: 'Не выбрано',
@@ -611,6 +547,7 @@ readyTab.addEventListener('click', () => {
     priceMax: 1000000,
     groupFrom: 1,
     groupTo: 10,
+    for: 'ready',
   };
 
   setFilter('filters/filter.php', updatePreviewList);
